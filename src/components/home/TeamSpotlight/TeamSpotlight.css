@@ -1,0 +1,92 @@
+.team-spotlight-section {
+  position: relative;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.team-spotlight-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.75rem;
+}
+
+.team-member-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+.team-member-card:hover {
+  border-color: var(--border-strong);
+}
+
+.member-photo-wrap {
+  width: 100%;
+}
+
+.member-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.member-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.member-role {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-signal);
+  margin-bottom: 0.25rem;
+}
+
+.member-year {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  margin-bottom: 0.85rem;
+}
+
+.member-bio {
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+.member-links-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.member-placeholder-link {
+  color: var(--text-muted);
+}
+
+.member-placeholder-divider {
+  color: var(--border-strong);
+}
+
+@media (max-width: 1024px) {
+  .team-spotlight-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .team-spotlight-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

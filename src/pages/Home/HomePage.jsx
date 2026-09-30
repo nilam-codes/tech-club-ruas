@@ -1,0 +1,35 @@
+import React from 'react';
+import Hero from '../../components/home/Hero/Hero';
+import UpcomingEvent from '../../components/home/UpcomingEvent/UpcomingEvent';
+import WhatWeDo from '../../components/home/WhatWeDo/WhatWeDo';
+import FeaturedEvents from '../../components/home/FeaturedEvents/FeaturedEvents';
+import ProjectShowcase from '../../components/home/ProjectShowcase/ProjectShowcase';
+import TeamSpotlight from '../../components/home/TeamSpotlight/TeamSpotlight';
+import SocialCTA from '../../components/home/SocialCTA/SocialCTA';
+
+export default function HomePage({ onNavigate }) {
+  return (
+    <div className="home-page">
+      {/* Hero section */}
+      <Hero onNavigate={onNavigate} />
+
+      {/* SECTION 01 — WHAT WE DO */}
+      <WhatWeDo />
+
+      {/* SECTION 02 — UP NEXT */}
+      <UpcomingEvent onNavigate={onNavigate} />
+
+      {/* 5. Upcoming / Recent Events (Clean chronological event list) */}
+      <FeaturedEvents onNavigate={onNavigate} />
+
+      {/* 6. Student Projects / Club Work (Visual project showcase) */}
+      <ProjectShowcase />
+
+      {/* 7. Team introduction */}
+      <TeamSpotlight onNavigate={onNavigate} />
+
+      {/* 8. Join the Club CTA */}
+      <SocialCTA onNavigate={onNavigate} />
+    </div>
+  );
+}

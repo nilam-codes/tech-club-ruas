@@ -1,0 +1,133 @@
+.hero-section {
+  position: relative;
+  padding-top: 5rem;
+  padding-bottom: 6rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 1.2fr 0.95fr;
+  align-items: center;
+  gap: 4.5rem;
+}
+
+/* Left Column */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Club Name & University */
+.hero-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-club-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-signal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-divider {
+  color: var(--border-strong);
+  font-size: 0.75rem;
+}
+
+.hero-college-name {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Official Tagline: THINK. BUILD. BELONG. */
+.hero-tagline {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(3.2rem, 6.8vw, 5.4rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.tagline-word {
+  display: block;
+}
+
+.tagline-accent {
+  color: var(--accent-signal);
+}
+
+/* Description */
+.hero-lead {
+  font-size: clamp(1.05rem, 1.5vw, 1.18rem);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-top: 1.85rem;
+  margin-bottom: 2.5rem;
+  max-width: 580px;
+}
+
+/* Actions */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Right Column: Visual Area */
+.hero-visual {
+  width: 100%;
+}
+
+.hero-image-frame {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 1024px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-section {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+
+  .hero-tagline {
+    font-size: clamp(2.6rem, 12vw, 3.8rem);
+    line-height: 1.0;
+  }
+
+  .hero-lead {
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,54 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  width: fit-content;
+}
+
+.badge-sm {
+  font-size: 0.675rem;
+  padding: 0.15rem 0.5rem;
+}
+
+.badge-md {
+  font-size: 0.725rem;
+  padding: 0.25rem 0.65rem;
+}
+
+/* Variants - Minimal & Flat */
+.badge-neutral,
+.badge-default {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+}
+
+.badge-signal,
+.badge-live,
+.badge-cyan {
+  background: var(--accent-signal-subtle);
+  color: var(--accent-signal);
+  border-color: var(--accent-signal-border);
+}
+
+.badge-violet,
+.badge-amber,
+.badge-emerald {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+}
+
+.badge-live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--accent-signal);
+  display: inline-block;
+}

@@ -1,0 +1,130 @@
+/* ==========================================================================
+   EDITORIAL GLOBAL UTILITIES & TYPOGRAPHY
+   ========================================================================== */
+
+/* Layout Containers */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+.section {
+  position: relative;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+/* Hairline Structural Divider */
+.hairline-divider {
+  height: 1px;
+  background-color: var(--border-subtle);
+  width: 100%;
+  border: none;
+}
+
+/* Section Index / Editorial Label */
+.section-index {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--accent-signal);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.section-index::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-signal);
+}
+
+/* Editorial Headlines */
+.editorial-title {
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  color: var(--text-primary);
+}
+
+.editorial-lead {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* Flat Surface Panels (No glow, no blur) */
+.flat-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+
+.flat-panel-interactive {
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.flat-panel-interactive:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-surface-elevated);
+}
+
+/* Monospace & Text Helpers */
+.text-mono {
+  font-family: var(--font-mono);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-signal {
+  color: var(--accent-signal);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #232836;
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333a4d;
+}

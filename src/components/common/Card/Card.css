@@ -1,0 +1,42 @@
+.custom-card {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.custom-card-interactive {
+  cursor: pointer;
+}
+
+.custom-card-interactive:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-surface-elevated);
+}
+
+/* Padding variants */
+.card-padding-none {
+  padding: 0;
+}
+
+.card-padding-sm {
+  padding: 1.25rem;
+}
+
+.card-padding-md {
+  padding: 1.75rem;
+}
+
+.card-padding-lg {
+  padding: 2.25rem;
+}
+
+@media (max-width: 640px) {
+  .card-padding-md {
+    padding: 1.25rem;
+  }
+  .card-padding-lg {
+    padding: 1.5rem;
+  }
+}
