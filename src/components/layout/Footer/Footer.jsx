@@ -15,7 +15,7 @@ export default function Footer({ onNavigate }) {
           <div className="footer-brand-col">
             <div className="footer-brand-title">
               <span className="footer-club-name">{CLUB_INFO.name}</span>
-              <span className="footer-college-name">{CLUB_INFO.college}</span>
+              <span className="footer-college-name">{CLUB_INFO.college} // DEPT. OF BCA</span>
             </div>
             
             <p className="footer-description">

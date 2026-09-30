@@ -39,7 +39,7 @@ export default function WhatWeDo() {
           {PILLARS.map((pillar) => (
             <div key={pillar.num} className="what-we-do-column">
               <div className="pillar-num">{pillar.num}</div>
-              <h3 className="pillar-title">{pillar.title}</h3>
+              <h3 className="pillar-title">&#123; {pillar.title} &#125;</h3>
               <p className="pillar-desc">{pillar.description}</p>
             </div>
           ))}

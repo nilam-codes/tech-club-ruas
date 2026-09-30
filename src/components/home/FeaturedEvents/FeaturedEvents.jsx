@@ -73,6 +73,9 @@ export default function FeaturedEvents({ onNavigate }) {
                   </div>
 
                   <div className="col-title">
+                    <div className="meta-label" style={{ marginBottom: '0.5rem', fontSize: '0.65rem' }}>
+                      RUAS // {event.category.toUpperCase()} // BCA
+                    </div>
                     <h4 className="row-event-title">{event.title}</h4>
                     <p className="row-event-desc">{event.description}</p>
                   </div>

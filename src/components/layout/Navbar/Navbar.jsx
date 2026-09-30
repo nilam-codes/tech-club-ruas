@@ -34,8 +34,10 @@ export default function Navbar({ activePage = 'home', onNavigate }) {
           className="navbar-brand" 
           onClick={() => handleLinkClick('home')}
         >
-          <span className="navbar-brand-name">{CLUB_INFO.name}</span>
-          <span className="navbar-brand-col">{CLUB_INFO.college}</span>
+          <span className="navbar-brand-name">
+            <span style={{ color: 'var(--color-brand-orange)', marginRight: '8px' }}>[RUAS]</span> 
+            {CLUB_INFO.name}
+          </span>
         </button>
 
         {/* Desktop Nav Links */}

@@ -34,6 +34,10 @@ export default function UpcomingEvent({ onNavigate }) {
                 </Badge>
               </div>
 
+              <div className="meta-label" style={{ marginBottom: '1rem' }}>
+                [EVENT 01] // BCA // OFFLINE // RUAS
+              </div>
+
               <h2 className="arena-headline">{UPCOMING_FLAGSHIP_EVENT.title}</h2>
 
               <p className="arena-description">

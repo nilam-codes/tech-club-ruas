@@ -12,6 +12,9 @@ export default function Hero({ onNavigate }) {
         {/* Left Column: Club Identity, Tagline & Description */}
         <div className="hero-content">
           {/* Club Name & University Label */}
+          <div className="meta-label" style={{ marginBottom: '1.5rem' }}>
+            // 2026 ACADEMIC YEAR // DEPARTMENT OF BCA
+          </div>
           <div className="hero-identity">
             <span className="hero-club-badge">{CLUB_INFO.name}</span>
             <span className="hero-divider" aria-hidden="true">•</span>
