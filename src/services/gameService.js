@@ -34,6 +34,22 @@ export async function removeMemberFromTeam(teamId, registrationId) {
 export async function authenticateTeam(teamName, teamCode) {
   const { data, error } = await supabase.from('teams').select('*, team_members(registration_id)').eq('event_id', EVENT_ID).eq('team_name', teamName).eq('team_code', teamCode).single();
   if (error || !data) return { success: false, error: 'Invalid team name or code.' };
+
+  const { data: participants, error: pError } = await supabase.rpc('get_team_participants', {
+    p_team_id: data.id,
+    p_team_code: teamCode
+  });
+
+  if (!pError && participants) {
+    data.team_members = data.team_members.map(tm => {
+      const p = participants.find(part => part.registration_id === tm.registration_id);
+      if (p) {
+        tm.registrations = { full_name: p.full_name };
+      }
+      return tm;
+    });
+  }
+
   return { success: true, data };
 }
 
@@ -97,7 +113,12 @@ export async function submitEntry(payload) {
     p_opposing_instruction_1: payload.opposing_instruction_1 || null,
     p_opposing_instruction_2: payload.opposing_instruction_2 || null
   });
-  if (error) return { success: false, error: error.message };
+  if (error) {
+    if (error.code === '23505' || error.message?.includes('duplicate key value') || error.message?.includes('unique_submission_per_team_round')) {
+      return { success: false, error: 'SUBMISSION ALREADY LOCKED\n\nYour team has already submitted for this round.' };
+    }
+    return { success: false, error: error.message };
+  }
   return { success: true };
 }
 
@@ -108,13 +129,35 @@ export async function submitVote(roundId, voterRegistrationId, submissionId, sco
     p_submission_id: submissionId,
     p_score: score
   });
-  if (error) return { success: false, error: error.message };
+  if (error) {
+    if (error.code === '23505' || error.message?.includes('duplicate key value') || error.message?.includes('unique_vote_per_participant_submission')) {
+      return { success: false, error: 'VOTE ALREADY CAST' };
+    }
+    return { success: false, error: error.message };
+  }
   return { success: true };
+}
+
+export async function getMyVotes(teamId, teamCode, registrationId, roundId) {
+  if (!isSupabaseConfigured() || !supabase) return { success: false, data: [] };
+  const { data, error } = await supabase.rpc('get_my_votes', {
+    p_team_id: teamId,
+    p_team_code: teamCode,
+    p_registration_id: registrationId,
+    p_round_id: roundId
+  });
+  if (error) return { success: false, error: error.message };
+  return { success: true, data: data.map(v => v.submission_id) };
 }
 
 export async function uploadImage(file, path) {
   const { data, error } = await supabase.storage.from('cooked-without-code').upload(path, file);
   if (error) return { success: false, error: error.message };
   const { data: publicUrlData } = supabase.storage.from('cooked-without-code').getPublicUrl(path);
-  return { success: true, url: publicUrlData.publicUrl };
+  return { success: true, url: publicUrlData.publicUrl, path };
+}
+
+export async function deleteImage(path) {
+  if (!isSupabaseConfigured() || !supabase) return;
+  await supabase.storage.from('cooked-without-code').remove([path]);
 }

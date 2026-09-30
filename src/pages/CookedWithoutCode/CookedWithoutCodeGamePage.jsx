@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { authenticateTeam, getRounds, getSubmissions, submitEntry, submitVote, uploadImage, getVotes } from '../../services/gameService';
+import { authenticateTeam, getRounds, getSubmissions, submitEntry, submitVote, uploadImage, deleteImage, getVotes, getMyVotes } from '../../services/gameService';
 import Button from '../../components/common/Button/Button';
 import './CookedWithoutCodeGamePage.css';
 
@@ -39,16 +39,24 @@ export default function CookedWithoutCodeGamePage({ onNavigate }) {
     
     if (team) {
       let allSubs = [];
-      let allVotes = [];
       for (const r of (rRes.data || [])) {
         const sRes = await getSubmissions(r.id);
-        const vRes = await getVotes(r.id);
         if (sRes.success) allSubs = [...allSubs, ...sRes.data];
-        if (vRes.success) allVotes = [...allVotes, ...vRes.data];
       }
       setSubmissions(allSubs);
       setMySubmissions(allSubs.filter(s => s.team_id === team.id));
-      setMyVotes(activeParticipant ? allVotes.filter(v => v.voter_registration_id === activeParticipant) : []);
+      
+      if (activeParticipant) {
+        const activeR = (rRes.data || []).find(r => r.status === 'voting');
+        if (activeR) {
+          const mRes = await getMyVotes(team.id, team.team_code, activeParticipant, activeR.id);
+          if (mRes.success) {
+            setMyVotes(mRes.data);
+          }
+        }
+      } else {
+        setMyVotes([]);
+      }
     }
     setLoading(false);
   };
@@ -79,12 +87,14 @@ export default function CookedWithoutCodeGamePage({ onNavigate }) {
     setSubmitStatus('submitting');
     
     let imageUrl = '';
+    let imageStoragePath = '';
     if (imageFile) {
       const ext = imageFile.name.split('.').pop();
       const path = `${team.id}/${round.id}_${Date.now()}.${ext}`;
       const uploadRes = await uploadImage(imageFile, path);
       if (uploadRes.success) {
         imageUrl = uploadRes.url;
+        imageStoragePath = uploadRes.path;
       } else {
         alert('Image upload failed: ' + uploadRes.error);
         setSubmitStatus('error');
@@ -116,7 +126,10 @@ export default function CookedWithoutCodeGamePage({ onNavigate }) {
       setOpposing1(''); setOpposing2('');
       fetchGameState();
     } else {
-      alert('Submission failed: ' + submitRes.error);
+      if (imageStoragePath) {
+        await deleteImage(imageStoragePath);
+      }
+      alert(submitRes.error);
       setSubmitStatus('error');
     }
   };
@@ -130,7 +143,7 @@ export default function CookedWithoutCodeGamePage({ onNavigate }) {
     if (res.success) {
       setVotingSubmissionId(null);
       setVotingScore(5);
-      fetchGameState();
+      setMyVotes(prev => [...prev, submissionId]);
     } else {
       alert(res.error);
     }
@@ -166,18 +179,6 @@ export default function CookedWithoutCodeGamePage({ onNavigate }) {
           <div>
             <h1 className="game-title">COOKED WITHOUT CODE</h1>
             <p className="game-subtitle">TEAM: {team.team_name}</p>
-          </div>
-          <div>
-            <select 
-              value={activeParticipant} 
-              onChange={e => setActiveParticipant(e.target.value)}
-              style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid var(--color-border)', padding: '8px' }}
-            >
-              <option value="">-- Who are you? --</option>
-              {team.team_members?.map(tm => (
-                <option key={tm.registration_id} value={tm.registration_id}>{tm.registrations?.full_name || tm.registration_id}</option>
-              ))}
-            </select>
           </div>
         </div>
 
@@ -232,7 +233,7 @@ export default function CookedWithoutCodeGamePage({ onNavigate }) {
                         <p className="mb-4">Choose ONE of three challenges.</p>
                         <div className="form-group mb-4">
                           <label>Select Challenge Option</label>
-                          <select value={challengeOption} onChange={e => setChallengeOption(e.target.value)} required>
+                          <select className="game-select" value={challengeOption} onChange={e => setChallengeOption(e.target.value)} required>
                             <option value="">Select an option...</option>
                             <option value="A">A: COLLEGE EDITION</option>
                             <option value="B">B: ONE IMAGE. THREE STORIES.</option>
@@ -293,11 +294,34 @@ export default function CookedWithoutCodeGamePage({ onNavigate }) {
             {activeRound.status === 'voting' && (
               <div className="game-voting-phase">
                 <span className="mono-badge mb-4 inline-block" style={{ background: 'rgba(0,255,100,0.1)', color: '#00ff64' }}>VOTING OPEN</span>
-                <p className="mb-6">Review the submissions and cast your vote (1-10).</p>
                 
-                <div className="game-submissions-grid">
+                <div style={{ marginBottom: '32px', background: 'rgba(255,255,255,0.02)', padding: '24px', border: '1px solid var(--border-subtle)', borderRadius: '4px' }}>
+                  <label style={{ display: 'block', marginBottom: '12px', color: 'var(--text-secondary)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 'bold' }}>WHO ARE YOU?</label>
+                  <select 
+                    className="participant-select"
+                    style={{ width: '100%', maxWidth: '300px' }}
+                    value={activeParticipant} 
+                    onChange={e => setActiveParticipant(e.target.value)}
+                  >
+                    <option value="">-- Select Your Name --</option>
+                    {team.team_members?.map(tm => (
+                      <option key={tm.registration_id} value={tm.registration_id}>{tm.registrations?.full_name || tm.registration_id}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {!activeParticipant ? (
+                  <div className="game-card text-center" style={{ marginTop: '24px' }}>
+                    <h2 style={{ color: 'var(--accent-signal)' }}>SELECT YOUR NAME</h2>
+                    <p>Please select your name from the dropdown above to view submissions and cast your votes.</p>
+                  </div>
+                ) : (
+                  <>
+                    <p className="mb-6">Review the submissions and cast your vote (1-10).</p>
+                    
+                    <div className="game-submissions-grid">
                   {submissions.filter(s => s.round_id === activeRound.id).map(sub => {
-                    const hasVoted = myVotes.some(v => v.submission_id === sub.id);
+                    const hasVoted = myVotes.includes(sub.id);
                     const isOwn = sub.team_id === team.id;
                     
                     return (
@@ -338,15 +362,17 @@ export default function CookedWithoutCodeGamePage({ onNavigate }) {
                     );
                   })}
                 </div>
-              </div>
+              </>
             )}
           </div>
-        ) : (
-          <div className="game-card text-center">
-            <h2>STAND BY</h2>
-            <p>Waiting for the organizers to start the round.</p>
-          </div>
         )}
+      </div>
+    ) : (
+      <div className="game-card text-center">
+        <h2>STAND BY</h2>
+        <p>Waiting for the organizers to start the round.</p>
+      </div>
+    )}
       </div>
     </div>
   );

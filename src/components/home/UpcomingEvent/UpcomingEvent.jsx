@@ -6,9 +6,9 @@ import Badge from '../../common/Badge/Badge';
 import './UpcomingEvent.css';
 
 export default function UpcomingEvent({ onNavigate }) {
-  const handleEnterArena = () => {
+  const handleViewEvent = () => {
     if (onNavigate) {
-      onNavigate('ai-challenge');
+      onNavigate('cooked-without-code');
     }
   };
 
@@ -30,7 +30,7 @@ export default function UpcomingEvent({ onNavigate }) {
               <div className="arena-top-meta">
                 <span className="arena-date">{UPCOMING_FLAGSHIP_EVENT.displayDate}</span>
                 <Badge variant="signal" size="sm">
-                  FIRST LIVE INTERACTIVE EVENT
+                  ON-SPOT REGISTRATION
                 </Badge>
               </div>
 
@@ -44,11 +44,11 @@ export default function UpcomingEvent({ onNavigate }) {
                 <Button
                   variant="signal"
                   size="lg"
-                  onClick={handleEnterArena}
+                  onClick={handleViewEvent}
                   icon={ArrowRight}
                   className="enter-arena-btn"
                 >
-                  ENTER THE ARENA
+                  VIEW EVENT
                 </Button>
 
                 <Button
@@ -85,22 +85,22 @@ export default function UpcomingEvent({ onNavigate }) {
                     <li className="spec-feature-item">
                       <span className="spec-feature-num">01</span>
                       <div className="spec-feature-text">
-                        <strong>Creative AI Problem Solving</strong>
-                        <p>Apply AI tooling and creative reasoning to solve prompt & engineering challenges.</p>
+                        <strong>Round 1 — COOK</strong>
+                        <p>Use AI tools to cook up creative solutions to the initial challenge.</p>
                       </div>
                     </li>
                     <li className="spec-feature-item">
                       <span className="spec-feature-num">02</span>
                       <div className="spec-feature-text">
-                        <strong>Unexpected Real-Time Challenges</strong>
-                        <p>Dynamic rounds with evolving constraints tested live in front of the club.</p>
+                        <strong>Round 2 — GET COOKED</strong>
+                        <p>Defend your work and adapt to unexpected restrictions.</p>
                       </div>
                     </li>
                     <li className="spec-feature-item">
                       <span className="spec-feature-num">03</span>
                       <div className="spec-feature-text">
-                        <strong>Points & Live Leaderboard</strong>
-                        <p>Compete individually or in squads for round-by-round point scoring.</p>
+                        <strong>Round 3 — SURVIVE</strong>
+                        <p>Face the final impossible challenge for the ultimate win.</p>
                       </div>
                     </li>
                   </ul>

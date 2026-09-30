@@ -90,9 +90,9 @@ export default function FeaturedEvents({ onNavigate }) {
                       <button
                         type="button"
                         className="row-action-link row-action-register"
-                        onClick={() => onNavigate && onNavigate('contact')}
+                        onClick={() => onNavigate && onNavigate(event.route ? event.route.replace('/events/', '') : 'contact')}
                       >
-                        <span>[Registration Link]</span>
+                        <span>{event.ctaText ? `[${event.ctaText}]` : '[Registration Link]'}</span>
                         <ArrowUpRight size={14} />
                       </button>
                     ) : (

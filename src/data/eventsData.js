@@ -4,14 +4,14 @@
 
 export const UPCOMING_FLAGSHIP_EVENT = {
   id: "6c6718bf-12b8-4b2a-a172-52d62fe4250f",
-  title: "AI CHALLENGE ARENA",
+  title: "COOKED WITHOUT CODE",
   category: "Interactive AI Competition",
   status: "upcoming",
-  displayDate: "23 September 2026",
-  description: "An interactive AI challenge where students use AI creatively, solve unexpected challenges and compete for points.",
-  ctaText: "ENTER THE ARENA",
-  route: "/events/ai-challenge",
-  registrationOpen: true
+  displayDate: "30 September 2026",
+  description: "An interactive AI challenge where participants use AI creatively to tackle unexpected challenges, create solutions, and compete through multiple rounds. No coding is required.",
+  ctaText: "ENTER GAME",
+  route: "/events/cooked-without-code",
+  registrationOpen: false
 };
 
 export const EVENTS_LIST = [
