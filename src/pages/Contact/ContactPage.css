@@ -211,3 +211,15 @@
     grid-template-columns: 1fr;
   }
 }
+
+.form-select {
+  background: #14161d;
+  color: #f5f5f5;
+  border: 1px solid #30323a;
+  color-scheme: dark;
+}
+.form-select option {
+  background: #14161d;
+  color: #f5f5f5;
+}
+

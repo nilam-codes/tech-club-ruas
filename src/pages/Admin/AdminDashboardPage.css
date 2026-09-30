@@ -341,3 +341,27 @@
 .mt-4 {
   margin-top: var(--space-4);
 }
+
+/* Select Dropdowns */
+.admin-page select,
+.admin-select {
+  background: #14161d;
+  color: #f5f5f5;
+  border: 1px solid #30323a;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  color-scheme: dark;
+}
+
+.admin-page select:focus,
+.admin-select:focus {
+  outline: none;
+  border-color: var(--color-brand-orange);
+}
+
+.admin-page select option,
+.admin-select option {
+  background: #14161d;
+  color: #f5f5f5;
+}
+

@@ -134,7 +134,7 @@ export default function AdminTeamsPanel() {
               <div>
                 <h4 style={{ fontSize: '12px', textTransform: 'uppercase', color: 'var(--color-text-secondary)', marginBottom: '8px' }}>Add Member</h4>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <select id={`select-${team.id}`} style={{ flex: 1, background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'white', padding: '8px' }}>
+                  <select id={`select-${team.id}`} className="admin-select" style={{ flex: 1, padding: '8px' }}>
                     <option value="">Select unassigned participant...</option>
                     {unassignedRegs.map(r => (
                       <option key={r.id} value={r.id}>{r.full_name} ({r.student_id})</option>

@@ -1,15 +1,16 @@
 /* Dropdown Select Styling for Game UI */
 .participant-select,
 .game-select {
-  background-color: var(--bg-surface);
-  color: var(--text-primary);
-  border: 1px solid var(--border-strong);
+  background: #14161d;
+  color: #f5f5f5;
+  border: 1px solid #30323a;
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.95rem;
   outline: none;
   cursor: pointer;
+  color-scheme: dark;
 }
 
 .participant-select:focus,
@@ -19,8 +20,8 @@
 
 .participant-select option,
 .game-select option {
-  background-color: var(--bg-surface);
-  color: var(--text-primary);
+  background: #14161d;
+  color: #f5f5f5;
   padding: 8px;
 }
 
