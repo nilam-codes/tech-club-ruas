@@ -56,7 +56,14 @@ export default function Navbar({ activePage = 'home', onNavigate }) {
         </nav>
 
         {/* Desktop Actions */}
-        <div className="navbar-actions-desktop">
+        <div className="navbar-actions-desktop" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <button
+            type="button"
+            style={{ fontSize: '0.85rem', color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            onClick={() => handleLinkClick('admin/login')}
+          >
+            Admin Login
+          </button>
           <Button
             variant="primary"
             size="sm"
@@ -92,7 +99,7 @@ export default function Navbar({ activePage = 'home', onNavigate }) {
               </button>
             ))}
           </nav>
-          <div className="navbar-mobile-actions">
+          <div className="navbar-mobile-actions" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <Button
               variant="primary"
               size="md"
@@ -101,6 +108,13 @@ export default function Navbar({ activePage = 'home', onNavigate }) {
             >
               Join Club
             </Button>
+            <button
+              type="button"
+              style={{ fontSize: '0.85rem', color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'center', width: '100%', padding: '8px 0' }}
+              onClick={() => handleLinkClick('admin/login')}
+            >
+              Admin Login
+            </button>
           </div>
         </div>
       )}
