@@ -6,6 +6,7 @@ import AdminTeamsPanel from './AdminTeamsPanel';
 import AdminRoundsPanel from './AdminRoundsPanel';
 import AdminSubmissionsPanel from './AdminSubmissionsPanel';
 import AdminVotingPanel from './AdminVotingPanel';
+import AdminArchivePanel from './AdminArchivePanel';
 import './AdminDashboardPage.css';
 
 export default function AdminDashboardPage({ onNavigate }) {
@@ -108,6 +109,12 @@ export default function AdminDashboardPage({ onNavigate }) {
               >
                 Results
               </button>
+              <button 
+                className={`admin-nav-item ${activeTab === 'archive' ? 'active' : ''}`}
+                onClick={() => setActiveTab('archive')}
+              >
+                Event Archive
+              </button>
             </nav>
           </div>
 
@@ -152,6 +159,10 @@ export default function AdminDashboardPage({ onNavigate }) {
 
             {(activeTab === 'voting' || activeTab === 'results') && (
               <AdminVotingPanel />
+            )}
+
+            {activeTab === 'archive' && (
+              <AdminArchivePanel />
             )}
           </div>
         </div>

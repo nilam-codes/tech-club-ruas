@@ -3,6 +3,7 @@ import Hero from '../../components/home/Hero/Hero';
 import UpcomingEvent from '../../components/home/UpcomingEvent/UpcomingEvent';
 import WhatWeDo from '../../components/home/WhatWeDo/WhatWeDo';
 import FeaturedEvents from '../../components/home/FeaturedEvents/FeaturedEvents';
+import PastEventsSection from '../../components/home/PastEventsSection/PastEventsSection';
 import ProjectShowcase from '../../components/home/ProjectShowcase/ProjectShowcase';
 import TeamSpotlight from '../../components/home/TeamSpotlight/TeamSpotlight';
 import SocialCTA from '../../components/home/SocialCTA/SocialCTA';
@@ -21,6 +22,9 @@ export default function HomePage({ onNavigate }) {
 
       {/* 5. Upcoming / Recent Events (Clean chronological event list) */}
       <FeaturedEvents onNavigate={onNavigate} />
+
+      {/* 5b. Past Events Archive */}
+      <PastEventsSection onNavigate={onNavigate} />
 
       {/* 6. Student Projects / Club Work (Visual project showcase) */}
       <ProjectShowcase />

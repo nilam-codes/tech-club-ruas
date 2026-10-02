@@ -365,3 +365,9 @@
   color: #f5f5f5;
 }
 
+
+/* Archive Panel Extras */
+.admin-card { background: rgba(255, 255, 255, 0.02); padding: 24px; border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.1)); margin-bottom: 24px; }
+.admin-card h3 { margin-bottom: 8px; color: var(--color-brand-orange); }
+.admin-card h4 { margin-bottom: 8px; }
+

@@ -9,20 +9,21 @@ import CookedWithoutCodePage from './pages/CookedWithoutCode/CookedWithoutCodePa
 import CookedWithoutCodeGamePage from './pages/CookedWithoutCode/CookedWithoutCodeGamePage';
 import AdminDashboardPage from './pages/Admin/AdminDashboardPage';
 import AdminLoginPage from './pages/Admin/AdminLoginPage';
+import PastEventsPage from './pages/Archive/PastEventsPage';
+import ArchiveDetailPage from './pages/Archive/ArchiveDetailPage';
 
 export default function App() {
   const getInitialPage = () => {
     const rawHash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
     
-    if (rawHash === 'events/cooked-without-code/game' || rawHash === 'cooked-without-code/game') {
-      return 'cooked-without-code-game';
-    }
-    if (rawHash === 'events/ai-challenge' || rawHash === 'ai-challenge' || rawHash === 'events/cooked-without-code' || rawHash === 'cooked-without-code') {
-      return 'cooked-without-code';
-    }
+    if (rawHash === 'events/cooked-without-code/game' || rawHash === 'cooked-without-code/game') return 'cooked-without-code-game';
+    if (rawHash === 'events/ai-challenge' || rawHash === 'ai-challenge' || rawHash === 'events/cooked-without-code' || rawHash === 'cooked-without-code') return 'cooked-without-code';
     if (rawHash === 'admin') return 'admin';
     if (rawHash === 'admin/login') return 'admin/login';
-    const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login'];
+    if (rawHash === 'past-events') return 'past-events';
+    if (rawHash.startsWith('archive/')) return rawHash;
+    
+    const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login', 'past-events'];
     return validPages.includes(rawHash) ? rawHash : 'home';
   };
 
@@ -48,7 +49,15 @@ export default function App() {
         setActivePage('admin/login');
         return;
       }
-      const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login'];
+      if (rawHash === 'past-events') {
+        setActivePage('past-events');
+        return;
+      }
+      if (rawHash.startsWith('archive/')) {
+        setActivePage(rawHash);
+        return;
+      }
+      const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login', 'past-events'];
       if (validPages.includes(rawHash)) {
         setActivePage(rawHash);
       }
@@ -74,11 +83,18 @@ export default function App() {
   };
 
   const renderPage = () => {
+    if (activePage.startsWith('archive/')) {
+      const eventId = activePage.split('/')[1];
+      return <ArchiveDetailPage eventId={eventId} onNavigate={navigateToPage} />;
+    }
+
     switch (activePage) {
       case 'about':
         return <AboutPage onNavigate={navigateToPage} />;
       case 'events':
         return <EventsPage onNavigate={navigateToPage} />;
+      case 'past-events':
+        return <PastEventsPage onNavigate={navigateToPage} />;
       case 'team':
         return <TeamPage onNavigate={navigateToPage} />;
       case 'contact':
