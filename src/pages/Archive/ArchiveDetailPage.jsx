@@ -91,8 +91,12 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
               </div>
             )}
 
-            {winnerPhoto && (
+            {winnerPhoto ? (
               <img src={winnerPhoto} alt="Winners" style={{ width: '100%', height: 'auto', border: '1px solid var(--color-brand-orange)' }} />
+            ) : (
+              <div style={{ padding: '40px', border: '1px dashed var(--color-brand-orange)', color: 'var(--color-brand-orange)', textAlign: 'center', opacity: 0.7 }}>
+                Winner photo not uploaded yet.
+              </div>
             )}
           </div>
         )}
@@ -119,6 +123,23 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* 3b. PARTICIPATING TEAMS */}
+        <div style={{ marginBottom: '64px' }}>
+          <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>PARTICIPATING TEAMS</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '24px' }}>
+            {archive.snapshot_teams.map((t, i) => (
+              <div key={i} style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '16px', background: 'rgba(255,255,255,0.02)' }}>
+                <h4 style={{ color: 'var(--color-brand-orange)', marginBottom: '8px', fontSize: '1.1rem' }}>{t.team_name}</h4>
+                <ul style={{ listStyle: 'none', padding: 0, fontSize: '0.9rem', opacity: 0.8 }}>
+                  {t.members.map((m, idx) => (
+                    <li key={idx}>- {m.full_name}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 

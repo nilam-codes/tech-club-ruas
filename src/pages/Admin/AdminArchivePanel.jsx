@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getRounds, getSubmissions, getVotes, getTeams } from '../../services/gameService';
+import { getRegistrationsForEvent } from '../../services/registrationService';
 import { 
   getArchiveByEventId, 
   upsertArchive, 
@@ -45,7 +46,7 @@ export default function AdminArchivePanel() {
     setLoading(true);
     try {
       // 1. Fetch live game data
-      const [rRes, tRes] = await Promise.all([getRounds(), getTeams()]);
+      const [rRes, tRes, regRes] = await Promise.all([getRounds(), getTeams(), getRegistrationsForEvent(eventId)]);
       let allSubs = [];
       let allVotes = [];
       
@@ -58,6 +59,7 @@ export default function AdminArchivePanel() {
         }
       }
       const liveTeams = tRes.success ? tRes.data : [];
+      const liveRegistrations = regRes.success ? regRes.data : [];
 
       // 2. Calculate Final Scoreboard
       const scores = {};
@@ -89,9 +91,10 @@ export default function AdminArchivePanel() {
       // 3. Calculate Public Teams Data
       const publicTeams = liveTeams.map(t => ({
         team_name: t.team_name,
-        members: (t.team_members || []).map(tm => ({
-          full_name: tm.registrations ? tm.registrations.full_name : 'Unknown'
-        }))
+        members: (t.team_members || []).map(tm => {
+          const reg = liveRegistrations.find(r => r.id === tm.registration_id);
+          return { full_name: reg ? reg.full_name : 'Unknown' };
+        })
       }));
 
       // 4. Upsert Archive Record
