@@ -91,6 +91,16 @@ export default function AdminLoginPage({ onNavigate }) {
             </Button>
           </form>
 
+          <div style={{ marginTop: '16px', textAlign: 'center' }}>
+            <button 
+              type='button' 
+              onClick={() => onNavigate('admin/forgot-password')} 
+              style={{ background: 'none', border: 'none', color: 'var(--color-brand-orange)', cursor: 'pointer', fontSize: '13px' }}
+            >
+              Forgot your password?
+            </button>
+          </div>
+
           <div className="admin-login-footer">
             <button type="button" className="text-link" onClick={() => onNavigate('home')}>
               ← Return to website

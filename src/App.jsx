@@ -9,11 +9,14 @@ import CookedWithoutCodePage from './pages/CookedWithoutCode/CookedWithoutCodePa
 import CookedWithoutCodeGamePage from './pages/CookedWithoutCode/CookedWithoutCodeGamePage';
 import AdminDashboardPage from './pages/Admin/AdminDashboardPage';
 import AdminLoginPage from './pages/Admin/AdminLoginPage';
+import AdminForgotPasswordPage from './pages/Admin/AdminForgotPasswordPage';
+import AdminResetPasswordPage from './pages/Admin/AdminResetPasswordPage';
 import PastEventsPage from './pages/Archive/PastEventsPage';
 import ArchiveDetailPage from './pages/Archive/ArchiveDetailPage';
 
 export default function App() {
   const getInitialPage = () => {
+    if (window.location.hash.includes('type=recovery')) return 'admin/reset-password';
     const rawHash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
     
     if (rawHash === 'events/cooked-without-code/game' || rawHash === 'cooked-without-code/game') return 'cooked-without-code-game';
@@ -23,7 +26,7 @@ export default function App() {
     if (rawHash === 'past-events') return 'past-events';
     if (rawHash.startsWith('archive/')) return rawHash;
     
-    const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login', 'past-events'];
+    const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login', 'admin/forgot-password', 'admin/reset-password', 'past-events'];
     return validPages.includes(rawHash) ? rawHash : 'home';
   };
 
@@ -31,6 +34,10 @@ export default function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
+      if (window.location.hash.includes('type=recovery')) {
+        setActivePage('admin/reset-password');
+        return;
+      }
       const rawHash = window.location.hash.replace(/^#\/?/, '').toLowerCase();
       
       if (rawHash === 'events/cooked-without-code/game' || rawHash === 'cooked-without-code/game') {
@@ -57,7 +64,7 @@ export default function App() {
         setActivePage(rawHash);
         return;
       }
-      const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login', 'past-events'];
+      const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login', 'admin/forgot-password', 'admin/reset-password', 'past-events'];
       if (validPages.includes(rawHash)) {
         setActivePage(rawHash);
       }
@@ -105,7 +112,11 @@ export default function App() {
         return <CookedWithoutCodeGamePage onNavigate={navigateToPage} />;
       case 'admin':
         return <AdminDashboardPage onNavigate={navigateToPage} />;
-      case 'admin/login':
+      case 'admin/forgot-password':
+          return <AdminForgotPasswordPage onNavigate={navigateToPage} />;
+        case 'admin/reset-password':
+          return <AdminResetPasswordPage onNavigate={navigateToPage} />;
+        case 'admin/login':
         return <AdminLoginPage onNavigate={navigateToPage} />;
       case 'home':
       default:
