@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Clock, Users, AlertCircle } from 'lucide-react';
 import { UPCOMING_FLAGSHIP_EVENT } from '../../data/eventsData';
+import { getPublicEventState } from '../../services/gameService';
 import Button from '../../components/common/Button/Button';
 import Badge from '../../components/common/Badge/Badge';
 import './CookedWithoutCodePage.css';
 
 export default function CookedWithoutCodePage({ onNavigate }) {
+  const [isCompleted, setIsCompleted] = useState(false);
+
+  useEffect(() => {
+    const checkState = async () => {
+      const state = await getPublicEventState(UPCOMING_FLAGSHIP_EVENT.id);
+      if (state.success && state.isCompleted) {
+        setIsCompleted(true);
+      }
+    };
+    checkState();
+  }, []);
+
   return (
     <div className="ai-challenge-page section">
       <div className="container">
@@ -42,14 +55,25 @@ export default function CookedWithoutCodePage({ onNavigate }) {
           </p>
           
           <div style={{ marginTop: '32px' }}>
-            <Button
-              variant="signal"
-              size="lg"
-              onClick={() => onNavigate && onNavigate('cooked-without-code-game')}
-              icon={ArrowRight}
-            >
-              ENTER GAME
-            </Button>
+            {isCompleted ? (
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => window.location.hash = '#/archive/' + UPCOMING_FLAGSHIP_EVENT.id}
+                icon={ArrowRight}
+              >
+                EVENT COMPLETE — VIEW ARCHIVE
+              </Button>
+            ) : (
+              <Button
+                variant="signal"
+                size="lg"
+                onClick={() => onNavigate && onNavigate('cooked-without-code-game')}
+                icon={ArrowRight}
+              >
+                ENTER GAME
+              </Button>
+            )}
           </div>
         </div>
 

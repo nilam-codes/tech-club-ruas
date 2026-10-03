@@ -1,0 +1,38 @@
+.winner-section {
+  padding: 80px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.winner-editorial-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.winner-hero-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.winner-content-box {
+  padding: 48px;
+  text-align: center;
+  background: var(--color-bg-paper);
+}
+
+@media (max-width: 768px) {
+  .winner-content-box {
+    padding: 32px 24px;
+  }
+  
+  .winner-section h2 {
+    font-size: 2rem !important;
+  }
+}

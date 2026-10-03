@@ -81,6 +81,20 @@ export async function initializeRoundsIfEmpty() {
   ]);
 }
 
+export async function getPublicEventState(eventId = EVENT_ID) {
+  if (!isSupabaseConfigured() || !supabase) return { success: false, isCompleted: false };
+  
+  const { data, error } = await supabase
+    .from('rounds')
+    .select('status')
+    .eq('event_id', eventId)
+    .eq('round_number', 3)
+    .single();
+    
+  if (error || !data) return { success: false, isCompleted: false };
+  return { success: true, isCompleted: data.status === 'completed' };
+}
+
 // ==========================================
 // SUBMISSIONS & VOTES
 // ==========================================

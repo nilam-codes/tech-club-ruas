@@ -1,6 +1,7 @@
 import React from 'react';
 import Hero from '../../components/home/Hero/Hero';
 import UpcomingEvent from '../../components/home/UpcomingEvent/UpcomingEvent';
+import WinnerSection from '../../components/home/WinnerSection/WinnerSection';
 import WhatWeDo from '../../components/home/WhatWeDo/WhatWeDo';
 import FeaturedEvents from '../../components/home/FeaturedEvents/FeaturedEvents';
 import PastEventsSection from '../../components/home/PastEventsSection/PastEventsSection';
@@ -15,6 +16,9 @@ export default function HomePage({ onNavigate }) {
       <Hero onNavigate={onNavigate} />
 
       {/* SECTION 01 — WHAT WE DO */}
+      {/* WINNER OF OUR FIRST EVENT */}
+      <WinnerSection />
+      
       <WhatWeDo />
 
       {/* SECTION 02 — UP NEXT */}

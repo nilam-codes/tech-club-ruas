@@ -36,7 +36,7 @@ export default function PastEventsSection({ onNavigate }) {
   };
 
   return (
-    <section className="section bg-grid-texture">
+    <section id="past-events" className="section bg-grid-texture">
       <div className="container">
         <SectionHeader
           index="04"
