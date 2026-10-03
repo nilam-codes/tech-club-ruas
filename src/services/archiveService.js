@@ -116,3 +116,15 @@ export async function deleteArchiveMedia(mediaId) {
   return { success: true };
 }
 
+
+export async function deleteArchiveImage(url) {
+  if (!isSupabaseConfigured() || !supabase || !url) return { success: false };
+  try {
+    const path = url.split('/event-archives/').pop();
+    if (path) {
+      await supabase.storage.from('event-archives').remove([path]);
+    }
+  } catch (e) {
+    console.error('Failed to delete image from storage:', e);
+  }
+}
