@@ -9,7 +9,7 @@ export default function ProjectShowcase() {
     <section className="project-showcase-section section" id="projects">
       <div className="container">
         <SectionHeader
-          index="04"
+          index="05"
           category="SELECTED WORK"
           title="Student Projects & Club Work"
           subtitle="A showcase of software utilities, open-source repositories, and technical prototypes built by club members."

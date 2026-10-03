@@ -10,7 +10,7 @@ export default function TeamSpotlight() {
       <div className="container">
         <div className="team-spotlight-header-row">
           <SectionHeader
-            index="05"
+            index="06"
             category="LEADERSHIP & CORE TEAM"
             title="Student Organizers & Leads"
             subtitle="The student coordinators responsible for planning workshops, organizing hackathons, and maintaining club infrastructure."
