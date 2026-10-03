@@ -89,13 +89,26 @@ export default function AdminArchivePanel() {
       const winnerTeamName = leaderboard.length > 0 ? leaderboard[0].team_name : null;
 
       // 3. Calculate Public Teams Data
-      const publicTeams = liveTeams.map(t => ({
-        team_name: t.team_name,
-        members: (t.team_members || []).map(tm => {
-          const reg = liveRegistrations.find(r => r.id === tm.registration_id);
-          return { full_name: reg ? reg.full_name : 'Unknown' };
-        })
-      }));
+      console.log('LIVE REGISTRATIONS:', liveRegistrations);
+      console.log('LIVE TEAMS:', liveTeams);
+
+      const publicTeams = liveTeams.map(t => {
+        console.log('TEAM MEMBERS RAW for', t.team_name, ':', t.team_members);
+        return {
+          team_name: t.team_name,
+          members: (t.team_members || []).map(tm => {
+            const reg = liveRegistrations.find(r => r.id === tm.registration_id);
+            console.log('LOOKUP:', tm.registration_id, reg);
+            
+            if (!reg) {
+              console.error('FAILED TO RESOLVE PARTICIPANT:', tm.registration_id);
+              throw new Error(`Could not resolve participant name for registration ID ${tm.registration_id}. Snapshot was not updated.`);
+            }
+            
+            return { full_name: reg.full_name };
+          })
+        };
+      });
 
       // 4. Upsert Archive Record
       const payload = {

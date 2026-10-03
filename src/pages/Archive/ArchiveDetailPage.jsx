@@ -145,12 +145,15 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
 
         {/* 4. ROUND SUBMISSIONS */}
         {[
-          { num: 1, title: 'ROUND 1', subs: round1Subs },
-          { num: 2, title: 'ROUND 2', subs: round2Subs },
-          { num: 3, title: 'ROUND 3', subs: round3Subs }
+          { num: 1, title: 'ROUND 1 - THE WORST SUPERHERO', subs: round1Subs },
+          { num: 2, title: 'ROUND 2 - GOVERNMENT ANNOUNCEMENT', subs: round2Subs },
+          { num: 3, title: 'ROUND 3 - FINAL COOKING', subs: round3Subs }
         ].map(round => round.subs.length > 0 && (
           <div key={round.num} style={{ marginBottom: '64px' }}>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>{round.title} SUBMISSIONS</h3>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '8px', textTransform: 'uppercase' }}>{round.title}</h3>
+            <div style={{ marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px', opacity: 0.8, fontSize: '0.9rem' }}>
+              Challenge Submissions
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '24px' }}>
               {round.subs.map(sub => (
                 <div key={sub.id} style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '12px', background: 'rgba(255,255,255,0.02)' }}>
