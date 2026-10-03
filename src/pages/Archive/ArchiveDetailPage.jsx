@@ -33,8 +33,8 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
     return media.filter(m => m.media_type === type && (round ? m.round_number === round : true));
   };
 
-  const winnerPhoto = getMedia('winner_photo')[0]?.image_url || archive.winner_photo_url;
-  const eventPoster = getMedia('event_poster')[0]?.image_url || archive.event_poster_url;
+  const winnerPhoto = getMedia('winner_photo')[0]?.image_url;
+  const eventPoster = getMedia('event_poster')[0]?.image_url;
   const gallery = getMedia('event_photo');
   const round1Subs = getMedia('round_submission', 1);
   const round2Subs = getMedia('round_submission', 2);
@@ -70,7 +70,9 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
           </p>
           
           {eventPoster && (
-            <img src={eventPoster} alt="Event Poster" style={{ width: '100%', height: 'auto', border: '1px solid rgba(255,255,255,0.1)' }} />
+            <div style={{ maxWidth: '600px', marginBottom: '32px' }}>
+              <img src={eventPoster} alt="Event Poster" style={{ width: '100%', height: 'auto', border: '1px solid rgba(255,255,255,0.1)' }} />
+            </div>
           )}
         </div>
 
@@ -92,7 +94,9 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
             )}
 
             {winnerPhoto ? (
-              <img src={winnerPhoto} alt="Winners" style={{ width: '100%', height: 'auto', border: '1px solid var(--color-brand-orange)' }} />
+              <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                <img src={winnerPhoto} alt="Winners" style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', border: '1px solid var(--color-brand-orange)' }} />
+              </div>
             ) : (
               <div style={{ padding: '40px', border: '1px dashed var(--color-brand-orange)', color: 'var(--color-brand-orange)', textAlign: 'center', opacity: 0.7 }}>
                 Winner photo not uploaded yet.
@@ -171,7 +175,7 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
             <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>EVENT GALLERY</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
               {gallery.map(photo => (
-                <img key={photo.id} src={photo.image_url} alt="Gallery" style={{ width: '100%', height: '200px', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)' }} />
+                <img key={photo.id} src={photo.image_url} alt="Gallery" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)' }} />
               ))}
             </div>
           </div>
