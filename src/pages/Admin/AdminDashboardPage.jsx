@@ -110,6 +110,12 @@ export default function AdminDashboardPage({ onNavigate }) {
               >
                 Results
               </button>
+              <button
+                className={`admin-nav-item ${activeTab === 'club-team' ? 'active' : ''}`}
+                onClick={() => setActiveTab('club-team')}
+              >
+                Club Team
+              </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'archive' ? 'active' : ''}`}
                 onClick={() => setActiveTab('archive')}
