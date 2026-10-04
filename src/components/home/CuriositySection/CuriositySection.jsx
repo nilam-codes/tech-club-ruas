@@ -36,7 +36,7 @@ export default function CuriositySection() {
         <div className="curiosity-list">
           {TOPICS.map((topic, index) => (
             <div key={topic.id} className="curiosity-item" style={{ transitionDelay: `${index * 0.1}s` }}>
-              <span className="curiosity-id">{topic.id} &mdash;</span>
+              <span className="curiosity-id">// {topic.id}</span>
               <span className="curiosity-title">{topic.title}</span>
               <div className="curiosity-hover-line"></div>
             </div>

@@ -17,9 +17,7 @@ export default function UpcomingEvent({ onNavigate }) {
       <div className="container">
         {/* Section Index */}
         <div className="section-index">
-          <span className="section-index-num">02</span>
-          <span className="section-index-slash">/</span>
-          <span className="section-index-cat">UP NEXT</span>
+          <span className="section-index-cat">$ ./up-next</span>
         </div>
 
         {/* Featured Arena Box — Prominent Editorial Highlight */}
@@ -73,7 +71,7 @@ export default function UpcomingEvent({ onNavigate }) {
             <div className="arena-preview-col">
               <div className="arena-spec-panel">
                 <div className="spec-panel-header">
-                  <span className="spec-panel-index">01 // LIVE EVENT BRIEF</span>
+                  <span className="spec-panel-index">$ ./live-event-brief</span>
                   <span className="spec-status-pill">
                     <span className="spec-status-dot"></span>
                     INTERACTIVE FORMAT

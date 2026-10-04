@@ -1,5 +1,5 @@
 /* ==========================================================================
-   EDITORIAL GLOBAL UTILITIES & TYPOGRAPHY
+   TECHNICAL CYBER GLOBAL UTILITIES & TYPOGRAPHY
    ========================================================================== */
 
 /* Layout Containers */
@@ -40,7 +40,7 @@
   border: none;
 }
 
-/* Section Index / Editorial Label */
+/* Section Index / Cyber Label */
 .section-index {
   display: inline-flex;
   align-items: center;
@@ -48,21 +48,19 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--accent-signal);
+  color: var(--accent-green);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 1.25rem;
 }
 
 .section-index::before {
-  content: "";
+  content: "$";
   display: inline-block;
-  width: 6px;
-  height: 6px;
-  background-color: var(--accent-signal);
+  color: var(--accent-cyan);
 }
 
-/* Editorial Headlines */
+/* Cyber Headlines */
 .editorial-title {
   font-size: clamp(2.2rem, 4.5vw, 3.8rem);
   font-weight: 800;
@@ -77,7 +75,7 @@
   color: var(--text-secondary);
 }
 
-/* Flat Surface Panels (No glow, no blur) */
+/* Flat Surface Panels */
 .flat-panel {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -90,7 +88,7 @@
 }
 
 .flat-panel-interactive:hover {
-  border-color: var(--border-strong);
+  border-color: var(--accent-cyan);
   background: var(--bg-surface-elevated);
 }
 
@@ -108,7 +106,7 @@
 }
 
 .text-signal {
-  color: var(--accent-signal);
+  color: var(--accent-cyan);
 }
 
 /* Scrollbar */
@@ -121,24 +119,47 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #232836;
+  background: var(--border-strong);
   border-radius: var(--radius-sm);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333a4d;
+  background: var(--accent-cyan);
 }
 
 /* Background Textures */
 .bg-grid-texture {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(0, 245, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 245, 255, 0.05) 1px, transparent 1px);
   background-size: 32px 32px;
 }
+
 .meta-label {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
+/* Hacker bracket corner styling utility */
+.corner-brackets {
+  position: relative;
+}
+.corner-brackets::before, .corner-brackets::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--accent-cyan);
+  transition: transform var(--transition-fast);
+}
+.corner-brackets::before {
+  top: -1px; left: -1px;
+  border-right: none; border-bottom: none;
+}
+.corner-brackets::after {
+  bottom: -1px; right: -1px;
+  border-left: none; border-top: none;
+}
+.corner-brackets:hover::before { transform: translate(-2px, -2px); }
+.corner-brackets:hover::after { transform: translate(2px, 2px); }

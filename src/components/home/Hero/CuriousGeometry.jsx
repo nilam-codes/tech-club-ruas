@@ -111,15 +111,21 @@ export default function CuriousGeometry() {
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = 'rgba(255, 70, 18, ' + (0.2 + (p1.z + size) / (2 * size) * 0.4) + ')';
-          ctx.stroke();
+          ctx.strokeStyle = 'rgba(0, 245, 255, ' + (0.2 + (p1.z + size) / (2 * size) * 0.4) + ')';
+                  ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(0, 245, 255, 0.5)';
+        ctx.stroke();
+        ctx.shadowBlur = 0;
         } else {
            const p2 = points[i - numPoints + 1];
            ctx.beginPath();
            ctx.moveTo(p1.x, p1.y);
            ctx.lineTo(p2.x, p2.y);
-           ctx.strokeStyle = 'rgba(255, 70, 18, ' + (0.2 + (p1.z + size) / (2 * size) * 0.4) + ')';
-           ctx.stroke();
+           ctx.strokeStyle = 'rgba(0, 245, 255, ' + (0.2 + (p1.z + size) / (2 * size) * 0.4) + ')';
+                   ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(0, 245, 255, 0.5)';
+        ctx.stroke();
+        ctx.shadowBlur = 0;
         }
         
         if (p1.ring < numRings - 1) {
@@ -127,13 +133,16 @@ export default function CuriousGeometry() {
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p3.x, p3.y);
-          ctx.strokeStyle = 'rgba(40, 40, 40, ' + (0.1 + (p1.z + size) / (2 * size) * 0.2) + ')';
-          ctx.stroke();
+          ctx.strokeStyle = 'rgba(57, 255, 20, ' + (0.1 + (p1.z + size) / (2 * size) * 0.2) + ')';
+                  ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(0, 245, 255, 0.5)';
+        ctx.stroke();
+        ctx.shadowBlur = 0;
         }
         
         ctx.beginPath();
         ctx.arc(p1.x, p1.y, 2, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(40, 40, 40, ' + (0.4 + (p1.z + size) / (2 * size) * 0.6) + ')';
+        ctx.fillStyle = 'rgba(57, 255, 20, ' + (0.4 + (p1.z + size) / (2 * size) * 0.6) + ')';
         ctx.fill();
       }
 

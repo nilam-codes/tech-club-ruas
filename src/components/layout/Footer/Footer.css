@@ -132,7 +132,7 @@
   font-size: 0.725rem;
   color: var(--text-muted);
   padding: 0.35rem 0.65rem;
-  background: var(--bg-surface);
+  background: transparent;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
 }
@@ -141,7 +141,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: var(--accent-signal);
+  background-color: var(--accent-green);
 }
 
 /* Footer Bottom */

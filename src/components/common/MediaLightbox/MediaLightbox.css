@@ -16,9 +16,9 @@
   position: absolute;
   top: 24px;
   right: 24px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: var(--border-strong);
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -31,7 +31,7 @@
 }
 
 .media-lightbox-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--accent-cyan);
   transform: scale(1.05);
 }
 
@@ -48,7 +48,7 @@
   max-height: 90vh;
   object-fit: contain;
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--border-strong);
 }
 
 .media-lightbox-video {
@@ -56,5 +56,5 @@
   max-height: 90vh;
   outline: none;
   box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--border-strong);
 }

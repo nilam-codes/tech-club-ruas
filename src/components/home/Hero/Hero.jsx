@@ -21,7 +21,7 @@ export default function Hero({ onNavigate }) {
 
           <p className="hero-lead">
             TECH CLUB<br/>
-            RAMAIAH UNIVERSITY OF APPLIED SCIENCES
+            DEPARTMENT OF COMPUTER APPLICATIONS
           </p>
 
           <div className="hero-actions">

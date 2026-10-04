@@ -41,7 +41,7 @@ function TeamCard({ member }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="team-member-card" ref={cardRef} >
+      <div className="team-member-card corner-brackets" ref={cardRef} >
         <div className="member-photo-wrap">
           <ImagePlaceholder
             aspectRatio="1/1"

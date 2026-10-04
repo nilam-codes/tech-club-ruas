@@ -35,7 +35,7 @@ export default function HorizontalGallery({ gallery, renderThumbnail }) {
     <div ref={containerRef} style={{ height: `${containerHeight}px`, position: 'relative' }}>
       <div ref={stickyRef} style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
         <div style={{ width: '100%', padding: '0 5vw' }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>EVENT GALLERY</h3>
+          <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid var(--border-strong)', paddingBottom: '16px' }}>EVENT GALLERY</h3>
           
           <div style={{ overflow: 'hidden' }}>
             <div 
@@ -54,7 +54,7 @@ export default function HorizontalGallery({ gallery, renderThumbnail }) {
                   style={{ 
                     width: '350px', 
                     aspectRatio: '3/4', 
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    border: '1px solid var(--border-strong)',
                     flexShrink: 0
                   }}
                 >

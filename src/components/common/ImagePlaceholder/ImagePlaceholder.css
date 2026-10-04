@@ -1,6 +1,6 @@
 .img-placeholder-frame {
   width: 100%;
-  background: #12141c;
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   position: relative;

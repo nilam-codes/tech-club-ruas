@@ -48,9 +48,9 @@ function InteractiveCard({ activity }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="what-we-do-card" ref={cardRef} >
+      <div className="what-we-do-card corner-brackets" ref={cardRef} >
         <div className="what-we-do-card-content">
-          <div className="activity-num">{activity.num}</div>
+          <div className="activity-num">// {activity.num}</div>
           <h3 className="activity-title">{activity.title}</h3>
           <p className="activity-desc">{activity.description}</p>
         </div>

@@ -66,7 +66,7 @@ export default function BuiltByClub() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(40, 40, 40, 0.4)';
+        ctx.fillStyle = 'rgba(57, 255, 20, 0.4)';
         ctx.fill();
         
         for (let j = i + 1; j < particles.length; j++) {

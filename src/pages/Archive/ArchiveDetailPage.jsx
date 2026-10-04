@@ -89,7 +89,7 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
           <div className="meta-label" style={{ marginBottom: '16px' }}>
             [ARCHIVE] // TECH CLUB // {archive.event_date}
           </div>
-          <h1 style={{ fontSize: '3.5rem', textTransform: 'uppercase', lineHeight: 1.1, marginBottom: '24px' }}>
+          <h1 style={{ fontSize: '3.5rem', lineHeight: 1.1, marginBottom: '24px' }}>
             {archive.title}
           </h1>
           <p style={{ fontSize: '1.25rem', opacity: 0.8, marginBottom: '32px', maxWidth: '600px' }}>
@@ -108,9 +108,9 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
         {/* 2. WINNER */}
         {archive.winner_team_name && (
           <FadeInSection delay={0.1}>
-          <div style={{ marginBottom: '64px', border: '1px solid var(--color-brand-orange)', padding: '32px', background: 'rgba(255, 60, 0, 0.05)' }}>
+          <div style={{ marginBottom: '64px', border: '1px solid var(--color-brand-orange)', padding: '32px', background: 'rgba(0, 245, 255, 0.05)' }}>
             <div className="meta-label" style={{ color: 'var(--color-brand-orange)', marginBottom: '16px' }}>CHAMPIONS</div>
-            <h2 style={{ fontSize: '2.5rem', textTransform: 'uppercase', marginBottom: '16px' }}>{archive.winner_team_name}</h2>
+            <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{archive.winner_team_name}</h2>
             
             {winnerTeamData && (
               <div style={{ marginBottom: '24px' }}>
@@ -138,11 +138,11 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
 
         {/* 3. FINAL SCOREBOARD */}
         <div style={{ marginBottom: '64px' }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>FINAL SCOREBOARD</h3>
+          <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid var(--border-strong)', paddingBottom: '16px' }}>FINAL SCOREBOARD</h3>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
+                <tr style={{ borderBottom: '1px solid var(--border-strong)' }}>
                   <th style={{ padding: '12px 8px' }}>Rank</th>
                   <th style={{ padding: '12px 8px' }}>Team</th>
                   <th style={{ padding: '12px 8px' }}>Final Score</th>
@@ -150,7 +150,7 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
               </thead>
               <tbody>
                 {archive.snapshot_scoreboard.map((t, i) => (
-                  <tr key={t.team_name} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', background: i === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
+                  <tr key={t.team_name} style={{ borderBottom: '1px solid var(--border-subtle)', background: i === 0 ? 'var(--bg-surface)' : 'transparent' }}>
                     <td style={{ padding: '12px 8px', color: i === 0 ? 'var(--color-brand-orange)' : 'inherit', fontWeight: i === 0 ? 'bold' : 'normal' }}>{t.rank}</td>
                     <td style={{ padding: '12px 8px', fontWeight: i === 0 ? 'bold' : 'normal' }}>{t.team_name}</td>
                     <td style={{ padding: '12px 8px', color: 'var(--color-brand-orange)' }}>{t.total}</td>
@@ -163,10 +163,10 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
 
         {/* 3b. PARTICIPATING TEAMS */}
         <div style={{ marginBottom: '64px' }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>PARTICIPATING TEAMS</h3>
+          <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid var(--border-strong)', paddingBottom: '16px' }}>PARTICIPATING TEAMS</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '24px' }}>
             {archive.snapshot_teams.map((t, i) => (
-              <div key={i} style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '16px', background: 'rgba(255,255,255,0.02)' }}>
+              <div key={i} style={{ border: '1px solid var(--border-strong)', padding: '16px', background: 'var(--bg-surface)' }}>
                 <h4 style={{ color: 'var(--color-brand-orange)', marginBottom: '8px', fontSize: '1.1rem' }}>{t.team_name}</h4>
                 <ul style={{ listStyle: 'none', padding: 0, fontSize: '0.9rem', opacity: 0.8 }}>
                   {t.members.map((m, idx) => (
@@ -185,15 +185,15 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
           { num: 3, title: 'ROUND 3 - FINAL COOKING', subs: round3Subs }
         ].map(round => round.subs.length > 0 && (
           <div key={round.num} style={{ marginBottom: '64px' }}>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '8px', textTransform: 'uppercase' }}>{round.title}</h3>
-            <div style={{ marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px', opacity: 0.8, fontSize: '0.9rem' }}>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>{round.title}</h3>
+            <div style={{ marginBottom: '24px', borderBottom: '1px solid var(--border-strong)', paddingBottom: '16px', opacity: 0.8, fontSize: '0.9rem' }}>
               Challenge Submissions
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '24px' }}>
               {round.subs.map((sub, idx) => (
                 <FadeInSection delay={idx * 0.1} key={sub.id}>
-                <div key={sub.id} style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '12px', background: 'rgba(255,255,255,0.02)' }}>
-                  <div style={{ width: '100%', aspectRatio: '1', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>{renderThumbnail(sub.image_url, 'Submission')}</div>
+                <div key={sub.id} style={{ border: '1px solid var(--border-strong)', padding: '12px', background: 'var(--bg-surface)' }}>
+                  <div style={{ width: '100%', aspectRatio: '1', marginBottom: '12px', border: '1px solid var(--border-strong)' }}>{renderThumbnail(sub.image_url, 'Submission')}</div>
                   <div className="meta-label">TEAM: {sub.team_name}</div>
                 </div>
                 </FadeInSection>

@@ -44,7 +44,7 @@ function EventCard({ event, onNavigate }) {
       onMouseLeave={handleMouseLeave}
       onClick={() => isUpcoming && onNavigate && onNavigate(event.route ? event.route.replace('/events/', '') : 'contact')}
     >
-      <div className="event-card" ref={cardRef} >
+      <div className="event-card corner-brackets" ref={cardRef} >
         
         <div className="event-card-content">
           <div className="event-card-header">
