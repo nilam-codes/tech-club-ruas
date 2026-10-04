@@ -4,8 +4,8 @@ export const CLUB_INFO = {
   name: "TECH CLUB",
   fullName: "TECH CLUB",
   college: "RAMAIAH UNIVERSITY OF APPLIED SCIENCES",
-  tagline: "THINK. BUILD. BELONG.",
-  taglineWords: ["THINK.", "BUILD.", "BELONG."],
+  tagline: "A PLACE FOR CURIOUS MINDS.",
+  taglineWords: ["A PLACE FOR", "CURIOUS MINDS."],
   description: "A student-led technical community at Ramaiah University of Applied Sciences, bringing together students who want to explore technology, build things, and learn with each other.",
   
   // Non-clickable placeholders until officially confirmed

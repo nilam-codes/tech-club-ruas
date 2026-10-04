@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Play } from 'lucide-react';
 import { getArchiveByEventId, getArchiveMedia, isVideoFile } from '../../services/archiveService';
 import MediaLightbox from '../../components/common/MediaLightbox/MediaLightbox';
+import FadeInSection from '../../components/common/FadeInSection/FadeInSection';
+import HorizontalGallery from '../../components/common/HorizontalGallery/HorizontalGallery';
 
 export default function ArchiveDetailPage({ eventId, onNavigate }) {
   const [archive, setArchive] = useState(null);
@@ -82,6 +84,7 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
         </div>
 
         {/* 1. EVENT HEADER */}
+        <FadeInSection>
         <div style={{ marginBottom: '64px' }}>
           <div className="meta-label" style={{ marginBottom: '16px' }}>
             [ARCHIVE] // TECH CLUB // {archive.event_date}
@@ -100,8 +103,11 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
           )}
         </div>
 
+        </FadeInSection>
+
         {/* 2. WINNER */}
         {archive.winner_team_name && (
+          <FadeInSection delay={0.1}>
           <div style={{ marginBottom: '64px', border: '1px solid var(--color-brand-orange)', padding: '32px', background: 'rgba(255, 60, 0, 0.05)' }}>
             <div className="meta-label" style={{ color: 'var(--color-brand-orange)', marginBottom: '16px' }}>CHAMPIONS</div>
             <h2 style={{ fontSize: '2.5rem', textTransform: 'uppercase', marginBottom: '16px' }}>{archive.winner_team_name}</h2>
@@ -127,6 +133,7 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
               </div>
             )}
           </div>
+          </FadeInSection>
         )}
 
         {/* 3. FINAL SCOREBOARD */}
@@ -183,11 +190,13 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
               Challenge Submissions
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '24px' }}>
-              {round.subs.map(sub => (
+              {round.subs.map((sub, idx) => (
+                <FadeInSection delay={idx * 0.1} key={sub.id}>
                 <div key={sub.id} style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '12px', background: 'rgba(255,255,255,0.02)' }}>
                   <div style={{ width: '100%', aspectRatio: '1', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>{renderThumbnail(sub.image_url, 'Submission')}</div>
                   <div className="meta-label">TEAM: {sub.team_name}</div>
                 </div>
+                </FadeInSection>
               ))}
             </div>
           </div>
@@ -195,14 +204,9 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
 
         {/* 5. EVENT GALLERY */}
         {gallery.length > 0 && (
-          <div style={{ marginBottom: '64px' }}>
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>EVENT GALLERY</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
-              {gallery.map(photo => (
-                <div key={photo.id} style={{ width: '100%', aspectRatio: '1/1', border: '1px solid rgba(255,255,255,0.1)' }}>{renderThumbnail(photo.image_url, 'Gallery')}</div>
-              ))}
-            </div>
-          </div>
+          <FadeInSection delay={0.2}>
+            <HorizontalGallery gallery={gallery} renderThumbnail={renderThumbnail} />
+          </FadeInSection>
         )}
         
       </div>

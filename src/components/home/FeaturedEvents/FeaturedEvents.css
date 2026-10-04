@@ -1,42 +1,40 @@
 .events-timeline-section {
   position: relative;
   border-bottom: 1px solid var(--border-subtle);
+  padding: 8rem 0;
+  background-color: var(--bg-primary);
 }
 
 .events-timeline-header-row {
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: 2rem;
-  margin-bottom: 2.5rem;
+  align-items: flex-end;
+  margin-bottom: 4rem;
   flex-wrap: wrap;
+  gap: 2rem;
 }
 
-.events-timeline-header-row .section-header {
-  margin-bottom: 0;
-}
-
-/* Filter Bar */
 .timeline-filter-bar {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
   background: var(--bg-surface);
+  padding: 0.5rem;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 0.25rem;
+  border-radius: var(--radius-full);
 }
 
 .timeline-filter-btn {
-  padding: 0.45rem 0.9rem;
   background: transparent;
   border: none;
-  font-family: var(--font-heading);
-  font-size: 0.825rem;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--text-secondary);
-  border-radius: var(--radius-sm);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
   cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   transition: all var(--transition-fast);
 }
 
@@ -45,134 +43,148 @@
 }
 
 .timeline-filter-btn.active {
-  background: var(--bg-surface-elevated);
-  color: var(--text-primary);
-  font-weight: 600;
+  background: var(--text-primary);
+  color: var(--bg-primary);
 }
 
-/* Table / Chronological List */
-.events-timeline-table {
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.event-card-wrapper {
+  perspective: 1200px;
+  height: 100%;
+}
+
+.event-card {
+  position: relative;
+  height: 100%;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  overflow: hidden;
   background: var(--bg-surface);
-}
-
-.timeline-table-head {
-  display: grid;
-  grid-template-columns: 180px 1.5fr 140px 180px 150px;
-  gap: 1.5rem;
-  padding: 1rem 1.75rem;
-  background: var(--bg-surface-elevated);
-  border-bottom: 1px solid var(--border-subtle);
-  font-family: var(--font-mono);
-  font-size: 0.725rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-}
-
-.timeline-table-body {
+  border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.timeline-row {
-  display: grid;
-  grid-template-columns: 180px 1.5fr 140px 180px 150px;
-  gap: 1.5rem;
+
+
+.event-card-content {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transform: translateZ(40px);
+  position: relative;
+  z-index: 2;
+}
+
+.event-card-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 1.75rem;
-  border-bottom: 1px solid var(--border-subtle);
-  transition: background-color var(--transition-fast);
+  margin-bottom: 2rem;
 }
 
-.timeline-row:last-child {
-  border-bottom: none;
-}
-
-.timeline-row:hover {
-  background: var(--bg-surface-elevated);
-}
-
-/* Columns */
-.col-date {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  align-items: flex-start;
-}
-
-.row-date-text {
+.event-card-date {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.col-title {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.row-event-title {
-  font-size: 1.15rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.row-event-desc {
-  font-size: 0.85rem;
+.event-card-meta {
+  margin-bottom: 1rem;
+}
+
+.event-card-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  transition: transform 0.4s ease;
+}
+
+.event-card-wrapper:hover .event-card-title {
+  transform: translateX(5px);
+}
+
+.event-card-desc {
+  font-size: 1rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  flex-grow: 1;
 }
 
-.row-category-pill {
+.event-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.5rem;
+}
+
+.event-card-location {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.row-location-text {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
-.row-action-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
+.event-card-action {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+.action-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
   color: var(--accent-signal);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  transition: transform 0.3s ease;
 }
 
-.row-action-link:hover {
-  color: var(--accent-signal-hover);
+.event-card-wrapper:hover .action-link {
+  transform: translateX(5px);
 }
 
-.row-action-past {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+.action-past {
   color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-card {
+    transition: none;
+    transform: none !important;
+  }
 }
 
 @media (max-width: 1024px) {
-  .timeline-table-head {
-    display: none;
-  }
-
-  .timeline-row {
-    grid-template-columns: 1fr;
-    gap: 0.85rem;
+  .events-timeline-header-row {
+    flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .events-timeline-section {
+    padding: 5rem 0;
+  }
+  .events-grid {
+    grid-template-columns: 1fr;
   }
 }

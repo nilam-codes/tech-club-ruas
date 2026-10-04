@@ -1,5 +1,6 @@
 import React from 'react';
 import Hero from '../../components/home/Hero/Hero';
+import CuriositySection from '../../components/home/CuriositySection/CuriositySection';
 import UpcomingEvent from '../../components/home/UpcomingEvent/UpcomingEvent';
 import WinnerSection from '../../components/home/WinnerSection/WinnerSection';
 import WhatWeDo from '../../components/home/WhatWeDo/WhatWeDo';
@@ -8,12 +9,15 @@ import PastEventsSection from '../../components/home/PastEventsSection/PastEvent
 import ProjectShowcase from '../../components/home/ProjectShowcase/ProjectShowcase';
 import TeamSpotlight from '../../components/home/TeamSpotlight/TeamSpotlight';
 import SocialCTA from '../../components/home/SocialCTA/SocialCTA';
+import BuiltByClub from '../../components/home/BuiltByClub/BuiltByClub';
 
 export default function HomePage({ onNavigate }) {
   return (
     <div className="home-page">
       {/* Hero section */}
       <Hero onNavigate={onNavigate} />
+
+      <CuriositySection />
 
       {/* SECTION 01 — WHAT WE DO */}
       {/* WINNER OF OUR FIRST EVENT */}

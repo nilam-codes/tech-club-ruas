@@ -5,7 +5,7 @@
   font-family: var(--font-heading);
   font-weight: 600;
   border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
   position: relative;
   text-decoration: none;
   cursor: pointer;
@@ -119,4 +119,15 @@
 
 .btn:hover .btn-icon-left {
   transform: translateX(-2px);
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    transform: scale(1.02) translateY(-1px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover {
+    transform: none;
+  }
 }

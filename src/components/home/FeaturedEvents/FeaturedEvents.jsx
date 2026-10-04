@@ -1,12 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { EVENTS_LIST } from '../../../data/eventsData';
 import SectionHeader from '../../common/SectionHeader/SectionHeader';
 import Badge from '../../common/Badge/Badge';
 import './FeaturedEvents.css';
 
+function EventCard({ event, onNavigate }) {
+  const cardRef = useRef(null);
+    const isUpcoming = event.status === 'upcoming';
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
+
+    setStyle({
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`,
+      transition: 'none'
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (!cardRef.current || !window.matchMedia('(hover: hover)').matches) return;
+    requestAnimationFrame(() => {
+      if (cardRef.current) {
+        cardRef.current.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        cardRef.current.style.transition = 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      }
+    });
+  };
+
+  return (
+    <div 
+      className="event-card-wrapper"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onClick={() => isUpcoming && onNavigate && onNavigate(event.route ? event.route.replace('/events/', '') : 'contact')}
+    >
+      <div className="event-card" ref={cardRef} >
+        
+        <div className="event-card-content">
+          <div className="event-card-header">
+            <span className="event-card-date">{event.displayDate}</span>
+            <Badge variant={isUpcoming ? 'signal' : 'neutral'} size="sm">
+              {isUpcoming ? '[UPCOMING]' : '[COMPLETED]'}
+            </Badge>
+          </div>
+          
+          <div className="meta-label event-card-meta">
+            RUAS // {event.category.toUpperCase()} // BCA
+          </div>
+          
+          <h4 className="event-card-title">{event.title}</h4>
+          <p className="event-card-desc">{event.description}</p>
+          
+          <div className="event-card-footer">
+            <div className="event-card-location">{event.location || '[TBA]'}</div>
+            <div className="event-card-action">
+              {isUpcoming ? (
+                <span className="action-link">
+                  {event.ctaText ? `[${event.ctaText}]` : '[REGISTER]'} <ArrowUpRight size={14} />
+                </span>
+              ) : (
+                <span className="action-past">[VIEW ARCHIVE]</span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function FeaturedEvents({ onNavigate }) {
-  const [filter, setFilter] = useState('all'); // 'all' | 'upcoming' | 'past'
+  const [filter, setFilter] = useState('all');
 
   const filteredEvents = EVENTS_LIST.filter((event) => {
     if (filter === 'all') return true;
@@ -24,7 +98,6 @@ export default function FeaturedEvents({ onNavigate }) {
             subtitle="Chronological record of our technical workshops, competitions, and collaborative community sessions."
           />
 
-          {/* Filter Bar */}
           <div className="timeline-filter-bar">
             <button
               type="button"
@@ -50,64 +123,10 @@ export default function FeaturedEvents({ onNavigate }) {
           </div>
         </div>
 
-        {/* Chronological Table/List */}
-        <div className="events-timeline-table">
-          <div className="timeline-table-head">
-            <span className="col-date">Date</span>
-            <span className="col-title">Event Title & Overview</span>
-            <span className="col-category">Category</span>
-            <span className="col-location">Location</span>
-            <span className="col-action">Action</span>
-          </div>
-
-          <div className="timeline-table-body">
-            {filteredEvents.map((event) => {
-              const isUpcoming = event.status === 'upcoming';
-              return (
-                <div key={event.id} className="timeline-row">
-                  <div className="col-date">
-                    <span className="row-date-text">{event.displayDate}</span>
-                    <Badge variant={isUpcoming ? 'signal' : 'neutral'} size="sm">
-                      {isUpcoming ? '[UPCOMING]' : '[COMPLETED]'}
-                    </Badge>
-                  </div>
-
-                  <div className="col-title">
-                    <div className="meta-label" style={{ marginBottom: '0.5rem', fontSize: '0.65rem' }}>
-                      RUAS // {event.category.toUpperCase()} // BCA
-                    </div>
-                    <h4 className="row-event-title">{event.title}</h4>
-                    <p className="row-event-desc">{event.description}</p>
-                  </div>
-
-                  <div className="col-category">
-                    <span className="row-category-pill">{event.category}</span>
-                  </div>
-
-                  <div className="col-location">
-                    <span className="row-location-text">{event.location}</span>
-                  </div>
-
-                  <div className="col-action">
-                    {isUpcoming ? (
-                      <button
-                        type="button"
-                        className="row-action-link row-action-register"
-                        onClick={() => onNavigate && onNavigate(event.route ? event.route.replace('/events/', '') : 'contact')}
-                      >
-                        <span>{event.ctaText ? `[${event.ctaText}]` : '[Registration Link]'}</span>
-                        <ArrowUpRight size={14} />
-                      </button>
-                    ) : (
-                      <span className="row-action-past">
-                        [Archive Link]
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        <div className="events-grid">
+          {filteredEvents.map((event) => (
+            <EventCard key={event.id} event={event} onNavigate={onNavigate} />
+          ))}
         </div>
       </div>
     </section>

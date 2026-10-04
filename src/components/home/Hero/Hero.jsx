@@ -1,39 +1,29 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { CLUB_INFO } from '../../../data/clubInfo';
 import Button from '../../common/Button/Button';
-import ImagePlaceholder from '../../common/ImagePlaceholder/ImagePlaceholder';
+import CuriousGeometry from './CuriousGeometry';
 import './Hero.css';
 
 export default function Hero({ onNavigate }) {
   return (
     <section className="hero-section">
       <div className="container hero-container">
-        {/* Left Column: Club Identity, Tagline & Description */}
+        
         <div className="hero-content">
-          {/* Club Name & University Label */}
-          <div className="meta-label" style={{ marginBottom: '1.5rem' }}>
-            // 2026 ACADEMIC YEAR // DEPARTMENT OF BCA
+          <div className="hero-metadata">
+            [RUAS] / DEPARTMENT OF COMPUTER APPLICATIONS / 2026
           </div>
-          <div className="hero-identity">
-            <span className="hero-club-badge">{CLUB_INFO.name}</span>
-            <span className="hero-divider" aria-hidden="true">•</span>
-            <span className="hero-college-name">{CLUB_INFO.college}</span>
-          </div>
-
-          {/* Prominent Official Tagline */}
+          
           <h1 className="hero-tagline">
-            <span className="tagline-word">THINK.</span>
-            <span className="tagline-word">BUILD.</span>
-            <span className="tagline-word tagline-accent">BELONG.</span>
+            <span className="tagline-word">A PLACE FOR</span>
+            <span className="tagline-word tagline-accent">CURIOUS MINDS.</span>
           </h1>
 
-          {/* Club Description */}
           <p className="hero-lead">
-            {CLUB_INFO.description}
+            TECH CLUB<br/>
+            RAMAIAH UNIVERSITY OF APPLIED SCIENCES
           </p>
 
-          {/* Clear CTAs */}
           <div className="hero-actions">
             <Button
               variant="signal"
@@ -41,26 +31,15 @@ export default function Hero({ onNavigate }) {
               onClick={() => onNavigate && onNavigate('events')}
               icon={ArrowRight}
             >
-              Explore Events
-            </Button>
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => onNavigate && onNavigate('contact')}
-            >
-              Join the Club
+              EXPLORE THE CLUB
             </Button>
           </div>
         </div>
 
-        {/* Right Column: Visual Area Reserved for Real Club Photo */}
         <div className="hero-visual">
-          <ImagePlaceholder
-            aspectRatio="4/3"
-            label="Club Activity / Workshop Photo"
-            sublabel="Visual area reserved for an actual club photograph or event image"
-            className="hero-image-frame"
-          />
+          <div className="hero-visual-frame">
+            <CuriousGeometry />
+          </div>
         </div>
       </div>
     </section>
