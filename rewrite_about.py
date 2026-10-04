@@ -1,4 +1,4 @@
-import React from 'react';
+content = '''import React from 'react';
 import SectionHeader from '../../components/common/SectionHeader/SectionHeader';
 import Card from '../../components/common/Card/Card';
 import Button from '../../components/common/Button/Button';
@@ -11,7 +11,7 @@ export default function AboutPage({ onNavigate }) {
     <div className="about-page section">
       <div className="container">
         
-        {/* 01 - WHO WE ARE */}
+        {/* 01 — WHO WE ARE */}
         <div className="about-section" style={{ marginBottom: '6rem' }}>
           <SectionHeader
             category="about"
@@ -27,7 +27,7 @@ export default function AboutPage({ onNavigate }) {
           </div>
         </div>
 
-        {/* 02 - WHAT WE'RE ABOUT */}
+        {/* 02 — WHAT WE'RE ABOUT */}
         <div className="about-section" style={{ marginBottom: '6rem' }}>
           <div className="section-index">
             <span className="section-index-cat">$ ./what-were-about</span>
@@ -69,7 +69,7 @@ export default function AboutPage({ onNavigate }) {
           </div>
         </div>
 
-        {/* 03 - WHAT WE DO */}
+        {/* 03 — WHAT WE DO */}
         <div className="about-section" style={{ marginBottom: '6rem' }}>
           <div className="section-index">
             <span className="section-index-cat">$ ./what-we-do</span>
@@ -96,7 +96,7 @@ export default function AboutPage({ onNavigate }) {
           </div>
         </div>
 
-        {/* 04 - OUR APPROACH */}
+        {/* 04 — OUR APPROACH */}
         <div className="about-section" style={{ marginBottom: '6rem' }}>
           <div className="section-index">
             <span className="section-index-cat">$ ./our-approach</span>
@@ -138,7 +138,7 @@ export default function AboutPage({ onNavigate }) {
           </div>
         </div>
 
-        {/* 05 - OUR COMMUNITY */}
+        {/* 05 — OUR COMMUNITY */}
         <div className="about-section" style={{ marginBottom: '6rem' }}>
           <h3 className="about-heading">OUR COMMUNITY</h3>
           <div className="about-text-content">
@@ -151,7 +151,7 @@ export default function AboutPage({ onNavigate }) {
           </div>
         </div>
 
-        {/* 06 - EVENTS & EXPERIENCES */}
+        {/* 06 — EVENTS & EXPERIENCES */}
         <div className="about-section flat-panel corner-brackets" style={{ padding: '3rem', marginBottom: '6rem' }}>
           <h3 className="about-heading">EVENTS & EXPERIENCES</h3>
           <h4 style={{ fontSize: '1.25rem', color: 'var(--accent-cyan)', marginBottom: '1rem' }}>
@@ -165,7 +165,7 @@ export default function AboutPage({ onNavigate }) {
           </Button>
         </div>
 
-        {/* 07 - THE PEOPLE BEHIND THE CLUB */}
+        {/* 07 — THE PEOPLE BEHIND THE CLUB */}
         <div className="about-section" style={{ textAlign: 'center' }}>
           <div className="section-index" style={{ justifyContent: 'center' }}>
             <span className="section-index-cat">$ ./leadership</span>
@@ -183,3 +183,7 @@ export default function AboutPage({ onNavigate }) {
     </div>
   );
 }
+'''
+
+with open('src/pages/About/AboutPage.jsx', 'w', encoding='utf-8') as f:
+    f.write(content)

@@ -71,7 +71,7 @@ export default function Navbar({ activePage = 'home', onNavigate }) {
             size="sm"
             onClick={() => handleLinkClick('contact')}
           >
-            Join Club
+            Contact
           </Button>
         </div>
 
@@ -108,7 +108,7 @@ export default function Navbar({ activePage = 'home', onNavigate }) {
               className="w-full"
               onClick={() => handleLinkClick('contact')}
             >
-              Join Club
+              Contact
             </Button>
             <button
               type="button"

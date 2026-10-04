@@ -40,7 +40,7 @@ export default function HomePage({ onNavigate }) {
       {/* 7. Team introduction */}
       <TeamSpotlight onNavigate={onNavigate} />
 
-      {/* 8. Join the Club CTA */}
+      {/* 8. Social CTA */}
       <SocialCTA onNavigate={onNavigate} />
     </div>
   );

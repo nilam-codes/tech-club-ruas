@@ -11,11 +11,11 @@ export default function SocialCTA({ onNavigate }) {
         <div className="join-cta-box flat-panel">
           <div className="join-cta-inner">
             <div className="section-index">
-              <span>06 / MEMBERSHIP & INTAKE</span>
+              <span className="section-index-cat">$ ./connect</span>
             </div>
 
             <h2 className="join-cta-title">
-              Interested in Building With Us?
+              Stay Connected
             </h2>
 
             <p className="join-cta-lead">
@@ -31,7 +31,7 @@ export default function SocialCTA({ onNavigate }) {
                 onClick={() => onNavigate && onNavigate('contact')}
                 icon={ArrowRight}
               >
-                Apply for Membership
+                Contact Us
               </Button>
               <Button
                 variant="secondary"

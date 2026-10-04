@@ -35,9 +35,9 @@ export default function ContactPage() {
       <div className="container">
         <SectionHeader
           index="CONTACT"
-          category="MEMBERSHIP & INQUIRIES"
+          category="INQUIRIES"
           title={`Contact & Join ${CLUB_INFO.name}`}
-          subtitle={`Reach out to the student coordinators or submit an application to join the collective at ${CLUB_INFO.college}.`}
+          subtitle={`Reach out to the student coordinators  at ${CLUB_INFO.college}.`}
         />
 
         <div className="contact-grid">
