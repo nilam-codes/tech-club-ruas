@@ -1,12 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { getArchiveByEventId, getArchiveMedia } from '../../services/archiveService';
+import { ArrowLeft, Play } from 'lucide-react';
+import { getArchiveByEventId, getArchiveMedia, isVideoFile } from '../../services/archiveService';
+import MediaLightbox from '../../components/common/MediaLightbox/MediaLightbox';
 
 export default function ArchiveDetailPage({ eventId, onNavigate }) {
   const [archive, setArchive] = useState(null);
   const [media, setMedia] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [lightboxUrl, setLightboxUrl] = useState(null);
+
+  const renderThumbnail = (url, alt) => {
+    if (!url) return null;
+    const isVideo = isVideoFile(url);
+    return (
+      <div 
+        style={{ width: '100%', height: '100%', position: 'relative', cursor: 'pointer', background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        onClick={() => setLightboxUrl(url)}
+      >
+        {isVideo ? (
+          <>
+            <video src={url} style={{ width: '100%', height: '100%', objectFit: 'contain' }} preload="metadata" />
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)' }}>
+              <Play size={48} color="white" />
+            </div>
+          </>
+        ) : (
+          <img src={url} alt={alt || 'Archive Media'} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        )}
+      </div>
+    );
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -71,7 +95,7 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
           
           {eventPoster && (
             <div style={{ maxWidth: '600px', marginBottom: '32px' }}>
-              <img src={eventPoster} alt="Event Poster" style={{ width: '100%', height: 'auto', border: '1px solid rgba(255,255,255,0.1)' }} />
+              {renderThumbnail(eventPoster, 'Event Poster')}
             </div>
           )}
         </div>
@@ -95,7 +119,7 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
 
             {winnerPhoto ? (
               <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                <img src={winnerPhoto} alt="Winners" style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', border: '1px solid var(--color-brand-orange)' }} />
+                {renderThumbnail(winnerPhoto, 'Winners')}
               </div>
             ) : (
               <div style={{ padding: '40px', border: '1px dashed var(--color-brand-orange)', color: 'var(--color-brand-orange)', textAlign: 'center', opacity: 0.7 }}>
@@ -161,7 +185,7 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '24px' }}>
               {round.subs.map(sub => (
                 <div key={sub.id} style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '12px', background: 'rgba(255,255,255,0.02)' }}>
-                  <img src={sub.image_url} alt="Submission" style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.1)' }} />
+                  <div style={{ width: '100%', aspectRatio: '1', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>{renderThumbnail(sub.image_url, 'Submission')}</div>
                   <div className="meta-label">TEAM: {sub.team_name}</div>
                 </div>
               ))}
@@ -175,14 +199,14 @@ export default function ArchiveDetailPage({ eventId, onNavigate }) {
             <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '16px' }}>EVENT GALLERY</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
               {gallery.map(photo => (
-                <img key={photo.id} src={photo.image_url} alt="Gallery" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.1)' }} />
+                <div key={photo.id} style={{ width: '100%', aspectRatio: '1/1', border: '1px solid rgba(255,255,255,0.1)' }}>{renderThumbnail(photo.image_url, 'Gallery')}</div>
               ))}
             </div>
           </div>
         )}
         
       </div>
+      {lightboxUrl && <MediaLightbox url={lightboxUrl} onClose={() => setLightboxUrl(null)} />}
     </div>
   );
 }
-

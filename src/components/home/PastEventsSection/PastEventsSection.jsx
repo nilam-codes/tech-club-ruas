@@ -53,7 +53,7 @@ export default function PastEventsSection({ onNavigate }) {
                 <img 
                   src={arch.event_poster_url} 
                   alt={arch.title} 
-                  style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', marginBottom: '24px', border: '1px solid rgba(255,255,255,0.1)' }} 
+                  style={{ width: '100%', aspectRatio: '16/9', objectFit: 'contain', marginBottom: '24px', border: '1px solid rgba(255,255,255,0.1)' }} 
                 />
               ) : (
                 <div style={{ width: '100%', aspectRatio: '16/9', marginBottom: '24px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-brand-orange)', fontSize: '14px', letterSpacing: '0.1em' }}>

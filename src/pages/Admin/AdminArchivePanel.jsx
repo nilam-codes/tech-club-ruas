@@ -9,7 +9,8 @@ import {
   addArchiveMedia,
   getArchiveMedia,
   deleteArchiveMedia,
-  deleteArchiveImage
+  deleteArchiveImage,
+  isVideoFile
 } from '../../services/archiveService';
 import { UPCOMING_FLAGSHIP_EVENT } from '../../data/eventsData';
 import Button from '../../components/common/Button/Button';
@@ -227,6 +228,49 @@ export default function AdminArchivePanel() {
     setLoading(false);
   };
 
+    const handleDirectReplace = async (mediaTarget, file) => {
+    if (!archive) return;
+    setLoading(true);
+    const ext = file.name.split('.').pop() || 'mp4';
+    let folder = 'gallery';
+    if (mediaTarget.media_type === 'event_poster') folder = 'poster';
+    if (mediaTarget.media_type === 'winner_photo') folder = 'winner';
+      if (mediaTarget.media_type === 'round_submission') folder = 'submissions';
+    const path = folder + '/' + archive.id + '_' + Date.now() + '_replaced.' + ext;
+    
+    const uploadRes = await uploadArchiveImage(file, path);
+    if (!uploadRes.success) {
+      alert('Media update failed. The existing media was kept.');
+      setLoading(false);
+      return;
+    }
+    
+    const { error: updateError } = await supabase
+      .from('event_archive_media')
+      .update({ image_url: uploadRes.url })
+      .eq('id', mediaTarget.id);
+      
+    if (updateError) {
+      alert('Media update failed at database level. The existing media was kept.');
+      setLoading(false);
+      return;
+    }
+
+    if (mediaTarget.media_type === 'event_poster') {
+      await supabase.from('event_archives').update({ event_poster_url: uploadRes.url }).eq('id', archive.id);
+    } else if (mediaTarget.media_type === 'winner_photo') {
+      await supabase.from('event_archives').update({ winner_photo_url: uploadRes.url }).eq('id', archive.id);
+    }
+
+    if (mediaTarget.image_url) {
+      await deleteArchiveImage(mediaTarget.image_url);
+    }
+
+    alert('Media replaced successfully.');
+    await loadArchive();
+    setLoading(false);
+  };
+
   // Crop Handlers
   const handleEditCropSave = async (croppedBlob) => {
     if (!editMediaTarget || !archive) return;
@@ -240,6 +284,7 @@ export default function AdminArchivePanel() {
     let folder = 'gallery';
     if (editMediaTarget.media_type === 'event_poster') folder = 'poster';
     if (editMediaTarget.media_type === 'winner_photo') folder = 'winner';
+      if (editMediaTarget.media_type === 'round_submission') folder = 'submissions';
     const path = `${folder}/${archive.id}_${Date.now()}_edited.${ext}`;
     
     const uploadRes = await uploadArchiveImage(croppedFile, path);
@@ -266,8 +311,8 @@ export default function AdminArchivePanel() {
       await supabase.from('event_archives').update({ winner_photo_url: uploadRes.url }).eq('id', archive.id);
     }
 
-    if (editMediaTarget.image_url) {
-      await deleteArchiveImage(editMediaTarget.image_url);
+    if (editMediaTarget.original_url || editMediaTarget.image_url) {
+      await deleteArchiveImage(editMediaTarget.original_url || editMediaTarget.image_url);
     }
 
     alert('Image updated successfully.');
@@ -315,12 +360,16 @@ export default function AdminArchivePanel() {
     const uploadRes = await uploadArchiveImage(eventPosterFile, path);
     if (uploadRes.success) {
       const existing = media.find(m => m.media_type === 'event_poster');
-      if (existing) {
-        if (existing.image_url) await deleteArchiveImage(existing.image_url);
-        await deleteArchiveMedia(existing.id);
+      
+      const mediaRes = await addArchiveMedia({ archive_id: archive.id, media_type: 'event_poster', image_url: uploadRes.url });
+      if (mediaRes.success) {
+        await supabase.from('event_archives').update({ event_poster_url: uploadRes.url }).eq('id', archive.id);
+        
+        if (existing) {
+          await deleteArchiveMedia(existing.id);
+          if (existing.image_url) await deleteArchiveImage(existing.image_url);
+        }
       }
-      await addArchiveMedia({ archive_id: archive.id, media_type: 'event_poster', image_url: uploadRes.url });
-      await supabase.from('event_archives').update({ event_poster_url: uploadRes.url }).eq('id', archive.id);
       setEventPosterFile(null);
       setPosterPreview(null);
       await loadArchive();
@@ -342,16 +391,19 @@ export default function AdminArchivePanel() {
     
     if (uploadRes.success) {
       const existing = media.find(m => m.media_type === 'winner_photo');
-      if (existing) {
-        if (existing.image_url) await deleteArchiveImage(existing.image_url);
-        await deleteArchiveMedia(existing.id);
-      }
       
       const mediaRes = await addArchiveMedia({ archive_id: archive.id, media_type: 'winner_photo', image_url: uploadRes.url });
       console.log('3. Media Row Result:', mediaRes);
       
-      const archiveUpdateRes = await supabase.from('event_archives').update({ winner_photo_url: uploadRes.url }).eq('id', archive.id);
-      console.log('4. Archive Update Result:', archiveUpdateRes);
+      if (mediaRes.success) {
+        const archiveUpdateRes = await supabase.from('event_archives').update({ winner_photo_url: uploadRes.url }).eq('id', archive.id);
+        console.log('4. Archive Update Result:', archiveUpdateRes);
+        
+        if (existing) {
+          await deleteArchiveMedia(existing.id);
+          if (existing.image_url) await deleteArchiveImage(existing.image_url);
+        }
+      }
       
       setWinnerPhotoFile(null);
       setWinnerPreview(null);
@@ -516,15 +568,22 @@ export default function AdminArchivePanel() {
                 <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexDirection: 'column' }}>
                   {posterPreview ? (
                     <div style={{ position: 'relative', width: '100%', aspectRatio: '2/3', background: '#000', border: '1px solid rgba(255,255,255,0.1)' }}>
-                      <img src={posterPreview} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      {isVideoFile(posterPreview) || (posterPreview && posterPreview.startsWith('blob:') && posterPreview.includes('video')) ? <video src={posterPreview} style={{ width: '100%', height: '100%', objectFit: 'contain' }} controls /> : <img src={posterPreview} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                       <button onClick={() => { setPosterPreview(null); setEventPosterFile(null); }} style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(0,0,0,0.7)', color: 'white', border: 'none', padding: '4px 8px', cursor: 'pointer' }}>Remove</button>
                     </div>
                   ) : (
-                    <input type="file" style={{ flex: 1 }} accept="image/*" onChange={e => {
-                      const file = e.target.files[0];
-                      if (file) setCropTarget({ type: 'poster', file, url: URL.createObjectURL(file) });
-                      e.target.value = null;
-                    }} />
+                    <input type="file" style={{ flex: 1 }} accept="image/*,video/mp4,video/webm,video/quicktime" onChange={e => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          if (file.type.startsWith('video/')) {
+                            setEventPosterFile(file);
+                            setPosterPreview(URL.createObjectURL(file));
+                          } else {
+                            setCropTarget({ type: 'poster', file, url: URL.createObjectURL(file) });
+                          }
+                        }
+                        e.target.value = null;
+                      }} />
                   )}
                   <Button variant="signal" size="sm" onClick={handleUploadPoster} disabled={!eventPosterFile || loading}>SAVE / UPLOAD POSTER</Button>
                 </div>
@@ -535,17 +594,24 @@ export default function AdminArchivePanel() {
                 <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexDirection: 'column' }}>
                   {winnerPreview ? (
                     <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', background: '#000', border: '1px solid rgba(255,255,255,0.1)' }}>
-                      <img src={winnerPreview} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      {isVideoFile(winnerPreview) || (winnerPreview && winnerPreview.startsWith('blob:') && winnerPreview.includes('video')) ? <video src={winnerPreview} style={{ width: '100%', height: '100%', objectFit: 'contain' }} controls /> : <img src={winnerPreview} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                       <button onClick={() => { setWinnerPreview(null); setWinnerPhotoFile(null); }} style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(0,0,0,0.7)', color: 'white', border: 'none', padding: '4px 8px', cursor: 'pointer' }}>Remove</button>
                     </div>
                   ) : (
                     <>
                       <p style={{ fontSize: '12px', opacity: 0.7, margin: 0 }}>Select an image to crop</p>
-                      <input type="file" style={{ flex: 1 }} accept="image/*" onChange={e => {
-                        const file = e.target.files[0];
-                        if (file) setCropTarget({ type: 'winner', file, url: URL.createObjectURL(file) });
-                        e.target.value = null;
-                      }} />
+                      <input type="file" style={{ flex: 1 }} accept="image/*,video/mp4,video/webm,video/quicktime" onChange={e => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            if (file.type.startsWith('video/')) {
+                              setWinnerPhotoFile(file);
+                              setWinnerPreview(URL.createObjectURL(file));
+                            } else {
+                              setCropTarget({ type: 'winner', file, url: URL.createObjectURL(file) });
+                            }
+                          }
+                          e.target.value = null;
+                        }} />
                     </>
                   )}
                   <Button variant="signal" size="sm" onClick={handleUploadWinner} disabled={!winnerPhotoFile || loading}>SAVE / UPLOAD WINNER</Button>
@@ -559,7 +625,7 @@ export default function AdminArchivePanel() {
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '8px', marginBottom: '8px' }}>
                       {croppedGalleryPhotos.map((p, i) => (
                         <div key={i} style={{ position: 'relative', aspectRatio: '1', border: '1px solid rgba(255,255,255,0.1)' }}>
-                          <img src={p.preview} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          {p.isVideo ? <video src={p.preview} style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> : <img src={p.preview} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
                           <button onClick={() => setCroppedGalleryPhotos(prev => prev.filter((_, idx) => idx !== i))} style={{ position: 'absolute', top: '2px', right: '2px', background: 'rgba(0,0,0,0.7)', color: 'white', border: 'none', padding: '2px 4px', fontSize: '10px', cursor: 'pointer' }}>X</button>
                         </div>
                       ))}
@@ -567,15 +633,23 @@ export default function AdminArchivePanel() {
                   )}
 
                   <div style={{ display: 'flex', gap: '16px' }}>
-                    <input type="file" style={{ flex: 1 }} accept="image/*" multiple onChange={e => {
-                      const files = Array.from(e.target.files);
-                      if (files.length > 0) {
-                        const first = files[0];
-                        setCropTarget({ type: 'gallery', file: first, url: URL.createObjectURL(first) });
-                        setGalleryQueue(files.slice(1));
-                      }
-                      e.target.value = null;
-                    }} />
+                    <input type="file" style={{ flex: 1 }} accept="image/*,video/mp4,video/webm,video/quicktime" multiple onChange={e => {
+                        const files = Array.from(e.target.files);
+                        if (files.length > 0) {
+                          const first = files[0];
+                          if (first.type.startsWith('video/')) {
+                            setCroppedGalleryPhotos(prev => [...prev, { file: first, preview: URL.createObjectURL(first), isVideo: true }]);
+                            files.slice(1).forEach(f => {
+                              if (f.type.startsWith('video/')) setCroppedGalleryPhotos(c => [...c, { file: f, preview: URL.createObjectURL(f), isVideo: true }]);
+                              else setGalleryQueue(c => [...c, f]);
+                            });
+                          } else {
+                            setCropTarget({ type: 'gallery', file: first, url: URL.createObjectURL(first) });
+                            setGalleryQueue(files.slice(1));
+                          }
+                        }
+                        e.target.value = null;
+                      }} />
                     <Button variant="signal" size="sm" onClick={handleUploadEventPhotos} disabled={croppedGalleryPhotos.length === 0 || loading}>SAVE / UPLOAD GALLERY ({croppedGalleryPhotos.length})</Button>
                   </div>
                 </div>
@@ -588,7 +662,19 @@ export default function AdminArchivePanel() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '16px', marginTop: '16px' }}>
               {media.map(m => (
                 <div key={m.id} style={{ position: 'relative', border: '1px solid rgba(255,255,255,0.1)', padding: '8px', background: 'rgba(255,255,255,0.02)' }}>
-                  <img src={m.image_url} alt={m.media_type} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
+                  <div style={{ width: '100%', height: '120px', position: 'relative', background: '#000' }}>
+                      {isVideoFile(m.image_url) ? (
+                        <>
+                          <video src={m.image_url} style={{ width: '100%', height: '100%', objectFit: 'contain' }} preload="metadata" />
+                          <div style={{ position: 'absolute', top: 4, left: 4, background: 'rgba(0,0,0,0.7)', color: 'white', padding: '2px 4px', fontSize: '10px' }}>VIDEO</div>
+                        </>
+                      ) : (
+                        <>
+                          <img src={m.image_url} alt={m.media_type} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                          <div style={{ position: 'absolute', top: 4, left: 4, background: 'rgba(0,0,0,0.7)', color: 'white', padding: '2px 4px', fontSize: '10px' }}>PHOTO</div>
+                        </>
+                      )}
+                    </div>
                   <div style={{ fontSize: '12px', marginTop: '8px', color: 'var(--color-brand-orange)' }}>{m.media_type.toUpperCase()}</div>
                   
                   {m.media_type === 'round_submission' && (
@@ -608,14 +694,21 @@ export default function AdminArchivePanel() {
                     </div>
                   )}
 
-                  {!m.media_type.startsWith('round') && (
-                    <button 
-                      onClick={() => setEditMediaTarget(m)} 
-                      style={{ position: 'absolute', top: '4px', right: '54px', background: 'var(--color-brand-orange)', color: 'white', padding: '4px 8px', fontSize: '10px', cursor: 'pointer', border: 'none' }}
-                    >
-                      Edit
-                    </button>
-                  )}
+                  <label 
+                        style={{ position: 'absolute', top: '4px', right: '54px', background: 'var(--color-brand-orange)', color: 'white', padding: '4px 8px', fontSize: '10px', cursor: 'pointer', border: 'none' }}
+                      >
+                        REPLACE
+                        <input type="file" accept="image/*,video/mp4,video/webm,video/quicktime" style={{display:'none'}} onChange={async (e) => {
+                          const file = e.target.files[0];
+                          if (!file) return;
+                          if (file.type.startsWith('video/')) {
+                            await handleDirectReplace(m, file);
+                          } else {
+                            setEditMediaTarget({ ...m, original_url: m.image_url, image_url: URL.createObjectURL(file), pendingFile: file });
+                          }
+                          e.target.value = null;
+                        }} />
+                      </label>
                   <button 
                     onClick={() => handleDeleteMedia(m.id)}
                     style={{ position: 'absolute', top: '4px', right: '4px', background: 'red', color: 'white', padding: '4px 8px', fontSize: '10px', cursor: 'pointer', border: 'none' }}
@@ -667,3 +760,4 @@ export default function AdminArchivePanel() {
     </div>
   );
 }
+

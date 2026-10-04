@@ -128,3 +128,9 @@ export async function deleteArchiveImage(url) {
     console.error('Failed to delete image from storage:', e);
   }
 }
+
+export function isVideoFile(filename) {
+  if (!filename) return false;
+  const ext = filename.split('.').pop().toLowerCase().split('?')[0];
+  return ['mp4', 'webm', 'mov', 'mkv', 'quicktime'].includes(ext);
+}
