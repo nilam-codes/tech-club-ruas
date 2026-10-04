@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { TEAM_MEMBERS } from '../../../data/teamData';
+import React, { useState, useEffect, useRef } from 'react';
+import { getPublicTeamMembers } from '../../../services/teamService';
 import SectionHeader from '../../common/SectionHeader/SectionHeader';
-import ImagePlaceholder from '../../common/ImagePlaceholder/ImagePlaceholder';
+import { User } from 'lucide-react';
 import './TeamSpotlight.css';
 
 function TeamCard({ member }) {
   const cardRef = useRef(null);
   
   const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || !window.matchMedia('(hover: hover)').matches) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -19,9 +19,11 @@ function TeamCard({ member }) {
     const rotateX = ((y - centerY) / centerY) * -8;
     const rotateY = ((x - centerX) / centerX) * 8;
 
-    setStyle({
-      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`,
-      transition: 'none'
+    requestAnimationFrame(() => {
+      if (cardRef.current) {
+        cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        cardRef.current.style.transition = 'none';
+      }
     });
   };
 
@@ -41,14 +43,15 @@ function TeamCard({ member }) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="team-member-card corner-brackets" ref={cardRef} >
+      <div className="team-member-card corner-brackets" ref={cardRef}>
         <div className="member-photo-wrap">
-          <ImagePlaceholder
-            aspectRatio="1/1"
-            label="Member Portrait"
-            sublabel="Reserved for actual student photograph"
-            className="member-portrait-frame"
-          />
+          {member.photo_url ? (
+            <img src={member.photo_url} alt={member.name} className="member-portrait-frame" style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover' }} />
+          ) : (
+            <div className="member-portrait-frame" style={{ width: '100%', aspectRatio: '1/1', background: 'var(--bg-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+              <User size={48} />
+            </div>
+          )}
           <div className="member-role-reveal">
             <span>{member.role}</span>
           </div>
@@ -56,18 +59,8 @@ function TeamCard({ member }) {
 
         <div className="member-info">
           <h3 className="member-name">{member.name}</h3>
-          <span className="member-year">{member.year}</span>
-          <p className="member-bio">{member.bio}</p>
-
-          <div className="member-links-row">
-            <span className="member-placeholder-link">
-              {member.github}
-            </span>
-            <span className="member-placeholder-divider">|</span>
-            <span className="member-placeholder-link">
-              {member.linkedin}
-            </span>
-          </div>
+          <p className="member-role text-mono" style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>{member.role}</p>
+          <span className="member-year text-mono" style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase' }}>{member.year}</span>
         </div>
       </div>
     </div>
@@ -75,23 +68,44 @@ function TeamCard({ member }) {
 }
 
 export default function TeamSpotlight() {
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadMembers() {
+      const data = await getPublicTeamMembers();
+      setMembers(data);
+      setLoading(false);
+    }
+    loadMembers();
+  }, []);
+
   return (
     <section className="team-spotlight-section section" id="team">
       <div className="container">
         <div className="team-spotlight-header-row">
           <SectionHeader
-            index="06"
-            category="LEADERSHIP & CORE TEAM"
-            title="Student Organizers & Leads"
+            category="team"
+            title="THE PEOPLE BEHIND THE CLUB."
             subtitle="The student coordinators responsible for planning workshops, organizing hackathons, and maintaining club infrastructure."
           />
         </div>
 
-        <div className="team-spotlight-grid">
-          {TEAM_MEMBERS.map((member) => (
-            <TeamCard key={member.id} member={member} />
-          ))}
-        </div>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+            $ Loading team registry...
+          </div>
+        ) : members.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+            [ No active team members found in the database. ]
+          </div>
+        ) : (
+          <div className="team-spotlight-grid">
+            {members.map((member) => (
+              <TeamCard key={member.id} member={member} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
