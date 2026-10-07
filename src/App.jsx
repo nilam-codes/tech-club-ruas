@@ -3,6 +3,7 @@ import Layout from './components/layout/Layout';
 import HomePage from './pages/Home/HomePage';
 import AboutPage from './pages/About/AboutPage';
 import EventsPage from './pages/Events/EventsPage';
+import EventDetailPage from './pages/Events/EventDetailPage';
 import TeamPage from './pages/Team/TeamPage';
 import ContactPage from './pages/Contact/ContactPage';
 import CookedWithoutCodePage from './pages/CookedWithoutCode/CookedWithoutCodePage';
@@ -25,6 +26,7 @@ export default function App() {
     if (rawHash === 'admin/login') return 'admin/login';
     if (rawHash === 'past-events') return 'past-events';
     if (rawHash.startsWith('archive/')) return rawHash;
+    if (rawHash.startsWith('event/')) return rawHash;
     
     const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login', 'admin/forgot-password', 'admin/reset-password', 'past-events'];
     return validPages.includes(rawHash) ? rawHash : 'home';
@@ -64,6 +66,10 @@ export default function App() {
         setActivePage(rawHash);
         return;
       }
+      if (rawHash.startsWith('event/')) {
+        setActivePage(rawHash);
+        return;
+      }
       const validPages = ['home', 'about', 'events', 'team', 'contact', 'admin', 'admin/login', 'admin/forgot-password', 'admin/reset-password', 'past-events'];
       if (validPages.includes(rawHash)) {
         setActivePage(rawHash);
@@ -93,6 +99,11 @@ export default function App() {
     if (activePage.startsWith('archive/')) {
       const eventId = activePage.split('/')[1];
       return <ArchiveDetailPage eventId={eventId} onNavigate={navigateToPage} />;
+    }
+    
+    if (activePage.startsWith('event/')) {
+      const eventId = activePage.split('/')[1];
+      return <EventDetailPage eventId={eventId} onNavigate={navigateToPage} />;
     }
 
     switch (activePage) {
@@ -130,4 +141,3 @@ export default function App() {
     </Layout>
   );
 }
-

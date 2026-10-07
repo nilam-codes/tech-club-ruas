@@ -1,13 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { EVENTS_LIST } from '../../../data/eventsData';
+import { getEvents } from '../../../services/eventsService';
 import SectionHeader from '../../common/SectionHeader/SectionHeader';
 import Badge from '../../common/Badge/Badge';
 import './FeaturedEvents.css';
 
 function EventCard({ event, onNavigate }) {
   const cardRef = useRef(null);
-    const isUpcoming = event.status === 'upcoming';
+  const isUpcoming = event.lifecycle_status === 'REGISTRATION_OPEN' || event.lifecycle_status === 'REGISTRATION_CLOSED' || event.status === 'upcoming';
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
@@ -21,10 +21,8 @@ function EventCard({ event, onNavigate }) {
     const rotateX = ((y - centerY) / centerY) * -5;
     const rotateY = ((x - centerX) / centerX) * 5;
 
-    setStyle({
-      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`,
-      transition: 'none'
-    });
+    cardRef.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    cardRef.current.style.transition = 'none';
   };
 
   const handleMouseLeave = () => {
@@ -37,32 +35,50 @@ function EventCard({ event, onNavigate }) {
     });
   };
 
+  const getDisplayDate = () => {
+    if (event.displayDate) return event.displayDate;
+    if (event.event_date) {
+      return new Date(event.event_date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    return '[TBA]';
+  };
+
+  const getCategory = () => {
+    if (event.category) return event.category;
+    if (event.club) return event.club;
+    return 'EVENT';
+  };
+
+  const getLocation = () => {
+    return event.location || event.venue || '[TBA]';
+  };
+
   return (
     <div 
       className="event-card-wrapper"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onClick={() => isUpcoming && onNavigate && onNavigate(event.route ? event.route.replace('/events/', '') : 'contact')}
+      onClick={() => onNavigate(`event/${event.id}`)}
     >
-      <div className="event-card corner-brackets" ref={cardRef} >
+      <div className="event-card corner-brackets" ref={cardRef}>
         
         <div className="event-card-content">
           <div className="event-card-header">
-            <span className="event-card-date">{event.displayDate}</span>
+            <span className="event-card-date">{getDisplayDate()}</span>
             <Badge variant={isUpcoming ? 'signal' : 'neutral'} size="sm">
               {isUpcoming ? '[UPCOMING]' : '[COMPLETED]'}
             </Badge>
           </div>
           
           <div className="meta-label event-card-meta">
-            RUAS // {event.category.toUpperCase()} // BCA
+            RUAS // {getCategory().toUpperCase()} // BCA
           </div>
           
           <h4 className="event-card-title">{event.title}</h4>
           <p className="event-card-desc">{event.description}</p>
           
           <div className="event-card-footer">
-            <div className="event-card-location">{event.location || '[TBA]'}</div>
+            <div className="event-card-location">{getLocation()}</div>
             <div className="event-card-action">
               {isUpcoming ? (
                 <span className="action-link">
@@ -81,11 +97,33 @@ function EventCard({ event, onNavigate }) {
 
 export default function FeaturedEvents({ onNavigate }) {
   const [filter, setFilter] = useState('all');
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredEvents = EVENTS_LIST.filter((event) => {
+  useEffect(() => {
+    async function loadEvents() {
+      setLoading(true);
+      const { data } = await getEvents({});
+      if (data) {
+        setEvents(data);
+      }
+      setLoading(false);
+    }
+    loadEvents();
+  }, []);
+
+  const filteredEvents = events.filter((event) => {
+    const isUpcoming = event.lifecycle_status === 'REGISTRATION_OPEN' || event.lifecycle_status === 'REGISTRATION_CLOSED' || event.status === 'upcoming';
+    const isPast = event.lifecycle_status === 'COMPLETED' || event.lifecycle_status === 'ARCHIVED' || event.status === 'past';
+    
     if (filter === 'all') return true;
-    return event.status === filter;
+    if (filter === 'upcoming') return isUpcoming;
+    if (filter === 'past') return isPast;
+    return true;
   });
+
+  const countUpcoming = events.filter(e => e.lifecycle_status === 'REGISTRATION_OPEN' || e.lifecycle_status === 'REGISTRATION_CLOSED' || e.status === 'upcoming').length;
+  const countPast = events.filter(e => e.lifecycle_status === 'COMPLETED' || e.lifecycle_status === 'ARCHIVED' || e.status === 'past').length;
 
   return (
     <section className="events-timeline-section section" id="events">
@@ -104,30 +142,36 @@ export default function FeaturedEvents({ onNavigate }) {
               className={`timeline-filter-btn ${filter === 'all' ? 'active' : ''}`}
               onClick={() => setFilter('all')}
             >
-              All ({EVENTS_LIST.length})
+              All ({events.length})
             </button>
             <button
               type="button"
               className={`timeline-filter-btn ${filter === 'upcoming' ? 'active' : ''}`}
               onClick={() => setFilter('upcoming')}
             >
-              Upcoming ({EVENTS_LIST.filter(e => e.status === 'upcoming').length})
+              Upcoming ({countUpcoming})
             </button>
             <button
               type="button"
               className={`timeline-filter-btn ${filter === 'past' ? 'active' : ''}`}
               onClick={() => setFilter('past')}
             >
-              Past ({EVENTS_LIST.filter(e => e.status === 'past').length})
+              Past ({countPast})
             </button>
           </div>
         </div>
 
-        <div className="events-grid">
-          {filteredEvents.map((event) => (
-            <EventCard key={event.id} event={event} onNavigate={onNavigate} />
-          ))}
-        </div>
+        {loading ? (
+          <div style={{ color: '#00ffcc', padding: '2rem 0', fontFamily: 'JetBrains Mono', fontSize: '0.875rem' }}>
+            [SYSTEM] Loading events data...
+          </div>
+        ) : (
+          <div className="events-grid">
+            {filteredEvents.map((event) => (
+              <EventCard key={event.id} event={event} onNavigate={onNavigate} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

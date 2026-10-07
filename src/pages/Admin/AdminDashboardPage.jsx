@@ -8,6 +8,7 @@ import AdminSubmissionsPanel from './AdminSubmissionsPanel';
 import AdminVotingPanel from './AdminVotingPanel';
 import AdminArchivePanel from './AdminArchivePanel';
 import AdminClubTeamPanel from './AdminClubTeamPanel';
+import AdminEventsManager from './AdminEventsManager';
 import './AdminDashboardPage.css';
 
 export default function AdminDashboardPage({ onNavigate }) {
@@ -75,40 +76,46 @@ export default function AdminDashboardPage({ onNavigate }) {
                 Overview
               </button>
               <button 
+                className={`admin-nav-item ${activeTab === 'events_manager' ? 'active' : ''}`}
+                onClick={() => setActiveTab('events_manager')}
+              >
+                Events Manager
+              </button>
+              <button 
                 className={`admin-nav-item ${activeTab === 'registrations' ? 'active' : ''}`}
                 onClick={() => setActiveTab('registrations')}
               >
-                Registrations
+                Registrations (Legacy)
               </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'teams' ? 'active' : ''}`}
                 onClick={() => setActiveTab('teams')}
               >
-                Teams
+                Teams (Legacy)
               </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'rounds' ? 'active' : ''}`}
                 onClick={() => setActiveTab('rounds')}
               >
-                Round Control
+                Round Control (Legacy)
               </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'submissions' ? 'active' : ''}`}
                 onClick={() => setActiveTab('submissions')}
               >
-                Submissions
+                Submissions (Legacy)
               </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'voting' ? 'active' : ''}`}
                 onClick={() => setActiveTab('voting')}
               >
-                Voting
+                Voting (Legacy)
               </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'results' ? 'active' : ''}`}
                 onClick={() => setActiveTab('results')}
               >
-                Results
+                Results (Legacy)
               </button>
               <button
                 className={`admin-nav-item ${activeTab === 'club-team' ? 'active' : ''}`}
@@ -146,6 +153,10 @@ export default function AdminDashboardPage({ onNavigate }) {
                   </div>
                 </div>
               </div>
+            )}
+
+            {activeTab === 'events_manager' && (
+              <AdminEventsManager />
             )}
 
             {activeTab === 'registrations' && (
