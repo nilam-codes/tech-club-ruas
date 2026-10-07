@@ -9,6 +9,21 @@ import AdminVotingPanel from './AdminVotingPanel';
 import AdminArchivePanel from './AdminArchivePanel';
 import AdminClubTeamPanel from './AdminClubTeamPanel';
 import AdminEventsManager from './AdminEventsManager';
+import { 
+  LayoutDashboard, 
+  CalendarPlus, 
+  Archive, 
+  Users, 
+  UserPlus, 
+  Swords, 
+  Upload, 
+  Vote, 
+  Trophy,
+  Terminal,
+  LogOut,
+  Activity,
+  ShieldCheck
+} from 'lucide-react';
 import './AdminDashboardPage.css';
 
 export default function AdminDashboardPage({ onNavigate }) {
@@ -44,150 +59,133 @@ export default function AdminDashboardPage({ onNavigate }) {
 
   if (loading) {
     return (
-      <div className="admin-page section">
+      <div className="admin-page section loading-state">
         <div className="container">
-          <p className="admin-loading-text">Verifying authorization...</p>
+          <Terminal className="loading-icon" size={32} />
+          <p className="admin-loading-text">INITIALIZING SECURE SESSION...</p>
         </div>
       </div>
     );
   }
 
+  const renderNavGroup = (title, items) => (
+    <div className="admin-nav-group">
+      <h3 className="admin-nav-group-title">{title}</h3>
+      <div className="admin-nav-items">
+        {items.map((item) => {
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              className={`admin-nav-item ${isActive ? 'active' : ''}`}
+              onClick={() => setActiveTab(item.id)}
+            >
+              <item.icon className="admin-nav-icon" size={18} />
+              <span>{item.label}</span>
+              {isActive && <div className="admin-nav-active-indicator" />}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="admin-page section">
-      <div className="container">
-        <div className="admin-header">
-          <div>
-            <h1>Admin Control Panel</h1>
-            <p className="admin-subtitle">Welcome, {user?.email}</p>
+    <div className="admin-page">
+      {/* Top Navigation Bar */}
+      <header className="admin-topbar">
+        <div className="admin-topbar-left">
+          <div className="admin-brand">
+            <Terminal className="admin-brand-icon" size={24} />
+            <span className="admin-brand-text">ADMIN_CONSOLE</span>
+            <span className="admin-brand-version">v2.0</span>
           </div>
-          <Button variant="outline" size="sm" onClick={handleLogout}>
-            Sign Out
-          </Button>
         </div>
-
-        <div className="admin-layout">
-          {/* Sidebar */}
-          <div className="admin-sidebar">
-            <nav className="admin-nav">
-              <button 
-                className={`admin-nav-item ${activeTab === 'overview' ? 'active' : ''}`}
-                onClick={() => setActiveTab('overview')}
-              >
-                Overview
-              </button>
-              <button 
-                className={`admin-nav-item ${activeTab === 'events_manager' ? 'active' : ''}`}
-                onClick={() => setActiveTab('events_manager')}
-              >
-                Events Manager
-              </button>
-              <button 
-                className={`admin-nav-item ${activeTab === 'registrations' ? 'active' : ''}`}
-                onClick={() => setActiveTab('registrations')}
-              >
-                Registrations (Legacy)
-              </button>
-              <button 
-                className={`admin-nav-item ${activeTab === 'teams' ? 'active' : ''}`}
-                onClick={() => setActiveTab('teams')}
-              >
-                Teams (Legacy)
-              </button>
-              <button 
-                className={`admin-nav-item ${activeTab === 'rounds' ? 'active' : ''}`}
-                onClick={() => setActiveTab('rounds')}
-              >
-                Round Control (Legacy)
-              </button>
-              <button 
-                className={`admin-nav-item ${activeTab === 'submissions' ? 'active' : ''}`}
-                onClick={() => setActiveTab('submissions')}
-              >
-                Submissions (Legacy)
-              </button>
-              <button 
-                className={`admin-nav-item ${activeTab === 'voting' ? 'active' : ''}`}
-                onClick={() => setActiveTab('voting')}
-              >
-                Voting (Legacy)
-              </button>
-              <button 
-                className={`admin-nav-item ${activeTab === 'results' ? 'active' : ''}`}
-                onClick={() => setActiveTab('results')}
-              >
-                Results (Legacy)
-              </button>
-              <button
-                className={`admin-nav-item ${activeTab === 'club-team' ? 'active' : ''}`}
-                onClick={() => setActiveTab('club-team')}
-              >
-                Club Team
-              </button>
-              <button 
-                className={`admin-nav-item ${activeTab === 'archive' ? 'active' : ''}`}
-                onClick={() => setActiveTab('archive')}
-              >
-                Event Archive
-              </button>
-            </nav>
+        <div className="admin-topbar-right">
+          <div className="admin-user-info">
+            <ShieldCheck size={16} className="admin-user-icon" />
+            <span className="admin-user-email">{user?.email}</span>
           </div>
+          <button className="admin-logout-btn" onClick={handleLogout} title="Sign Out">
+            <LogOut size={18} />
+          </button>
+        </div>
+      </header>
 
-          {/* Main Content Area */}
-          <div className="admin-content">
+      <div className="admin-layout">
+        {/* Sidebar */}
+        <aside className="admin-sidebar">
+          <div className="admin-sidebar-content">
+            {renderNavGroup('OVERVIEW', [
+              { id: 'overview', label: 'Dashboard', icon: LayoutDashboard }
+            ])}
+            
+            {renderNavGroup('EVENT PLATFORM', [
+              { id: 'events_manager', label: 'Events Manager', icon: CalendarPlus },
+              { id: 'archive', label: 'Event Archive', icon: Archive }
+            ])}
+
+            {renderNavGroup('CLUB', [
+              { id: 'club-team', label: 'Club Team', icon: Users }
+            ])}
+
+            {renderNavGroup('LEGACY (COOKED WITHOUT CODE)', [
+              { id: 'registrations', label: 'Registrations', icon: UserPlus },
+              { id: 'teams', label: 'Teams', icon: Users },
+              { id: 'rounds', label: 'Round Control', icon: Swords },
+              { id: 'submissions', label: 'Submissions', icon: Upload },
+              { id: 'voting', label: 'Voting', icon: Vote },
+              { id: 'results', label: 'Results', icon: Trophy }
+            ])}
+          </div>
+        </aside>
+
+        {/* Main Content Area */}
+        <main className="admin-main">
+          <div className="admin-content-wrapper">
             {activeTab === 'overview' && (
-              <div className="admin-panel">
-                <h2>System Overview</h2>
-                <p className="admin-panel-text">
-                  Welcome to the TECH CLUB administration system. Select a module from the sidebar to manage club operations.
-                </p>
-                <div className="admin-placeholder-grid">
-                  <div className="admin-placeholder-card">
-                    <span className="placeholder-icon">Sz</span>
-                    <h3>Modules Online</h3>
-                    <p>Foundation system operational.</p>
+              <div className="admin-overview-panel">
+                <div className="admin-overview-header">
+                  <h2>System Status</h2>
+                  <div className="status-badge online">
+                    <Activity size={14} />
+                    <span>ALL SYSTEMS NOMINAL</span>
                   </div>
-                  <div className="admin-placeholder-card">
-                    <span className="placeholder-icon">s</span>
-                    <h3>Security</h3>
-                    <p>Row-Level Security active.</p>
+                </div>
+                
+                <div className="admin-stats-grid">
+                  <div className="admin-stat-card">
+                    <div className="stat-icon-wrapper cyan">
+                      <LayoutDashboard size={24} />
+                    </div>
+                    <div className="stat-content">
+                      <p className="stat-label">Platform Version</p>
+                      <h4 className="stat-value">2.0.0-prod</h4>
+                    </div>
+                  </div>
+                  <div className="admin-stat-card">
+                    <div className="stat-icon-wrapper acid">
+                      <ShieldCheck size={24} />
+                    </div>
+                    <div className="stat-content">
+                      <p className="stat-label">Security</p>
+                      <h4 className="stat-value">RLS Active</h4>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {activeTab === 'events_manager' && (
-              <AdminEventsManager />
-            )}
-
-            {activeTab === 'registrations' && (
-              <AdminRegistrationsPanel />
-            )}
-
-            {activeTab === 'teams' && (
-              <AdminTeamsPanel />
-            )}
-
-            {activeTab === 'rounds' && (
-              <AdminRoundsPanel />
-            )}
-
-            {activeTab === 'submissions' && (
-              <AdminSubmissionsPanel />
-            )}
-
-            {(activeTab === 'voting' || activeTab === 'results') && (
-              <AdminVotingPanel />
-            )}
-
-            {activeTab === 'club-team' && (
-              <AdminClubTeamPanel />
-            )}
-
-            {activeTab === 'archive' && (
-              <AdminArchivePanel />
-            )}
+            {activeTab === 'events_manager' && <AdminEventsManager />}
+            {activeTab === 'registrations' && <AdminRegistrationsPanel />}
+            {activeTab === 'teams' && <AdminTeamsPanel />}
+            {activeTab === 'rounds' && <AdminRoundsPanel />}
+            {activeTab === 'submissions' && <AdminSubmissionsPanel />}
+            {(activeTab === 'voting' || activeTab === 'results') && <AdminVotingPanel />}
+            {activeTab === 'club-team' && <AdminClubTeamPanel />}
+            {activeTab === 'archive' && <AdminArchivePanel />}
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );
